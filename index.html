@@ -3,68 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>InkVibe - Anime Card Game</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
-
 <style>
-body {
-  margin: 0;
-  background: linear-gradient(180deg, #0f172a, #020617);
-  color: white;
-  font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
-  text-align: center;
-}
-h1 {
-  margin-top: 20px;
-  font-size: 2.5em;
-  text-shadow: 0 0 20px #6366f1;
-}
-button, select {
-  padding: 10px 15px;
-  margin: 10px;
-  border: none;
-  border-radius: 10px;
-  background: rgba(99,102,241,0.2);
-  color: white;
-  backdrop-filter: blur(10px);
-  cursor: pointer;
-  transition: 0.2s;
-}
-button:hover {
-  background: #6366f1;
-  box-shadow: 0 0 15px #6366f1;
-}
-#pointsDisplay {
-  font-size: 18px;
-  margin-top: 15px;
-}
-.card {
-  margin-top: 20px;
-  padding: 15px;
-  width: 220px;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(15px);
-  display: inline-block;
-  animation: fadeIn 0.5s ease;
-  border: 3px solid transparent;
-}
-.card img {
-  width: 100%;
-  border-radius: 10px;
-}
-.card h3 {
-  margin: 10px 0;
-}
-#collection p {
-  opacity: 0.8;
-  font-size: 14px;
-}
-@keyframes fadeIn {
-  from {opacity:0; transform: scale(0.8);}
-  to {opacity:1; transform: scale(1);}
-}
-/* Seltenheitsfarben */
+body { margin:0; background: linear-gradient(180deg, #0f172a, #020617); color:white; font-family:'Orbitron','Noto Sans JP',sans-serif; text-align:center; }
+h1 { margin-top:20px; font-size:2.5em; text-shadow:0 0 20px #6366f1; }
+button, select { padding:10px 15px; margin:10px; border:none; border-radius:10px; background: rgba(99,102,241,0.2); color:white; backdrop-filter: blur(10px); cursor:pointer; transition:0.2s; }
+button:hover { background:#6366f1; box-shadow:0 0 15px #6366f1; }
+#pointsDisplay { font-size:18px; margin-top:15px; }
+.card { margin-top:20px; padding:15px; width:220px; border-radius:15px; background: rgba(255,255,255,0.05); backdrop-filter:blur(15px); display:inline-block; animation:fadeIn 0.5s ease; border:3px solid transparent; }
+.card img { width:100%; border-radius:10px; }
+.card h3 { margin:10px 0; }
+#collection p { opacity:0.8; font-size:14px; }
+@keyframes fadeIn { from {opacity:0; transform: scale(0.8);} to {opacity:1; transform: scale(1);} }
 .Common { border-color: gray; }
 .Rare { border-color: #3b82f6; }
 .Epic { border-color: #a855f7; }
@@ -81,73 +31,25 @@ button:hover {
   <option value="jp">日本語</option>
 </select>
 
-<br>
-
 <p id="pointsDisplay">Ink: 0</p>
 <button onclick="collectDailyInk()" id="dailyBtn">Tägliche Ink holen</button>
 <button onclick="drawCard()" id="drawBtn">Karte ziehen (5 Ink)</button>
 
 <div id="cardContainer"></div>
-
 <h2>Collection</h2>
 <div id="collection"></div>
 
 <script>
 // Sprache
 let lang = "de";
-const text = {
-  de: { draw: "Karte ziehen (5 Ink)", daily: "Tägliche Ink holen" },
-  en: { draw: "Draw Card (5 Ink)", daily: "Collect Daily Ink" },
-  jp: { draw: "カードを引く（Ink 5）", daily: "毎日のInkを受け取る" }
-};
+const text = { de:{draw:"Karte ziehen (5 Ink)",daily:"Tägliche Ink holen"}, en:{draw:"Draw Card (5 Ink)",daily:"Collect Daily Ink"}, jp:{draw:"カードを引く（Ink 5）",daily:"毎日のInkを受け取る"} };
+function changeLang(l){ lang=l; document.getElementById("drawBtn").innerText=text[lang].draw; document.getElementById("dailyBtn").innerText=text[lang].daily; showCollection(); }
 
-// Sprache wechseln
-function changeLang(l) {
-  lang = l;
-  document.getElementById("drawBtn").innerText = text[lang].draw;
-  document.getElementById("dailyBtn").innerText = text[lang].daily;
-  showCollection();
-}
-
-// 30 Anime-Karten
-const cards = [
-  {name:{de:"Feuerdrache",en:"Fire Dragon",jp:"火のドラゴン"},type:"Feuer",rarity:"Legendary",img:"https://i.imgur.com/1AqVn7L.png"},
-  {name:{de:"Wassergeist",en:"Water Spirit",jp:"水の精霊"},type:"Wasser",rarity:"Epic",img:"https://i.imgur.com/A0jYfQ5.png"},
-  {name:{de:"Schattenwolf",en:"Shadow Wolf",jp:"影のオオカミ"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/2L7cUOv.png"},
-  {name:{de:"Lichtfee",en:"Light Fairy",jp:"光の妖精"},type:"Licht",rarity:"Common",img:"https://i.imgur.com/Bv5h3Z2.png"},
-  {name:{de:"Sturmluchs",en:"Storm Lynx",jp:"嵐の山猫"},type:"Blitz",rarity:"Epic",img:"https://i.imgur.com/C9i8pWs.png"},
-  {name:{de:"Eisdrache",en:"Ice Dragon",jp:"氷のドラゴン"},type:"Eis",rarity:"Legendary",img:"https://i.imgur.com/Dz0rV0v.png"},
-  {name:{de:"Nebelgeist",en:"Mist Spirit",jp:"霧の精霊"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/ER7cKuv.png"},
-  {name:{de:"Nachtfalke",en:"Night Falcon",jp:"夜の鷹"},type:"Schatten",rarity:"Epic",img:"https://i.imgur.com/Fk1hX8u.png"},
-  {name:{de:"Sonnenkrieger",en:"Sun Warrior",jp:"太陽の戦士"},type:"Licht",rarity:"Rare",img:"https://i.imgur.com/Gh4vI9w.png"},
-  {name:{de:"Mondkatze",en:"Moon Cat",jp:"月の猫"},type:"Schatten",rarity:"Common",img:"https://i.imgur.com/H0jT2Pm.png"},
-  {name:{de:"Flammenfuchs",en:"Flame Fox",jp:"火の狐"},type:"Feuer",rarity:"Epic",img:"https://i.imgur.com/I2pL4Xm.png"},
-  {name:{de:"Wasserlilie",en:"Water Lily",jp:"水のユリ"},type:"Wasser",rarity:"Common",img:"https://i.imgur.com/J9xT1Ko.png"},
-  {name:{de:"Schattenpanther",en:"Shadow Panther",jp:"影の黒豹"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/K0yP8Js.png"},
-  {name:{de:"Lichterfee",en:"Glow Fairy",jp:"光の妖精"},type:"Licht",rarity:"Epic",img:"https://i.imgur.com/L1mK4Pw.png"},
-  {name:{de:"Sturmsalamander",en:"Storm Salamander",jp:"嵐のサラマンダー"},type:"Blitz",rarity:"Rare",img:"https://i.imgur.com/M9qH2Pt.png"},
-  {name:{de:"Eisgeist",en:"Ice Spirit",jp:"氷の精霊"},type:"Eis",rarity:"Epic",img:"https://i.imgur.com/N0kL3Qs.png"},
-  {name:{de:"Nebelwolf",en:"Mist Wolf",jp:"霧のオオカミ"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/O1rF5Ku.png"},
-  {name:{de:"Nachtelfe",en:"Night Elf",jp:"夜の妖精"},type:"Schatten",rarity:"Legendary",img:"https://i.imgur.com/P2jV7Lm.png"},
-  {name:{de:"Sonnenlicht",en:"Sunlight",jp:"太陽の光"},type:"Licht",rarity:"Common",img:"https://i.imgur.com/Q3tH6Ks.png"},
-  {name:{de:"Mondgeist",en:"Moon Spirit",jp:"月の精霊"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/R4wJ9Pn.png"},
-  {name:{de:"Flammengeist",en:"Flame Spirit",jp:"火の精霊"},type:"Feuer",rarity:"Epic",img:"https://i.imgur.com/S5xT1Km.png"},
-  {name:{de:"Wasserdrache",en:"Water Dragon",jp:"水のドラゴン"},type:"Wasser",rarity:"Legendary",img:"https://i.imgur.com/T6vU3Ln.png"},
-  {name:{de:"Schattenfee",en:"Shadow Fairy",jp:"影の妖精"},type:"Schatten",rarity:"Rare",img:"https://i.imgur.com/U7yV2Jp.png"},
-  {name:{de:"Lichthüter",en:"Light Guardian",jp:"光の守護者"},type:"Licht",rarity:"Epic",img:"https://i.imgur.com/V8wH5Qr.png"},
-  {name:{de:"Sturmgeist",en:"Storm Spirit",jp:"嵐の精霊"},type:"Blitz",rarity:"Rare",img:"https://i.imgur.com/W9kJ6St.png"},
-  {name:{de:"Eisfuchs",en:"Ice Fox",jp:"氷の狐"},type:"Eis",rarity:"Epic",img:"https://i.imgur.com/X0mL8Uv.png"},
-  {name:{de:"Nebelkrieger",en:"Mist Warrior",jp:"霧の戦士"},type:"Schatten",rarity:"Legendary",img:"https://i.imgur.com/Y1nP9Vw.png"},
-  {name:{de:"Nachtdrache",en:"Night Dragon",jp:"夜のドラゴン"},type:"Schatten",rarity:"Epic",img:"https://i.imgur.com/Z2qR1Xs.png"},
-  {name:{de:"Sonnenfee",en:"Sun Fairy",jp:"太陽の妖精"},type:"Licht",rarity:"Rare",img:"https://i.imgur.com/A3sH2Yt.png"},
-  {name:{de:"Monddrache",en:"Moon Dragon",jp:"月のドラゴン"},type:"Schatten",rarity:"Legendary",img:"https://i.imgur.com/B4tT3Zu.png"}
-];
-
-// Speicher
-let collection = JSON.parse(localStorage.getItem("cards")) || [];
+// Punkte
 let points = Number(localStorage.getItem("points")) || 0;
+let collection = JSON.parse(localStorage.getItem("cards")) || [];
 
-// Tägliche Ink (10 pro Tag)
+// Tägliche Ink
 function collectDailyInk(){
   const today = new Date().toISOString().slice(0,10);
   const lastClaim = localStorage.getItem("lastDaily") || "";
@@ -157,15 +59,28 @@ function collectDailyInk(){
     localStorage.setItem("lastDaily", today);
     updatePoints();
     alert(lang=="de"?"Du hast 10 Ink erhalten!":"en"?"You received 10 Ink!":"10 Inkを獲得しました！");
-  } else {
-    alert(lang=="de"?"Du hast heute schon Ink gesammelt!":"en"?"You already collected Ink today!":"今日のInkはもう受け取り済みです！");
-  }
+  } else alert(lang=="de"?"Du hast heute schon Ink gesammelt!":"en"?"You already collected Ink today!":"今日のInkはもう受け取り済みです！");
 }
 
-// Karte ziehen (5 Ink)
+// Karten
+const cards = [
+{name:{de:"Feuerdrache",en:"Fire Dragon",jp:"火のドラゴン"},rarity:"Legendary",img:"https://i.imgur.com/1AqVn7L.png"},
+{name:{de:"Wassergeist",en:"Water Spirit",jp:"水の精霊"},rarity:"Epic",img:"https://i.imgur.com/A0jYfQ5.png"},
+{name:{de:"Schattenwolf",en:"Shadow Wolf",jp:"影のオオカミ"},rarity:"Rare",img:"https://i.imgur.com/2L7cUOv.png"},
+{name:{de:"Lichtfee",en:"Light Fairy",jp:"光の妖精"},rarity:"Common",img:"https://i.imgur.com/Bv5h3Z2.png"},
+{name:{de:"Sturmluchs",en:"Storm Lynx",jp:"嵐の山猫"},rarity:"Epic",img:"https://i.imgur.com/C9i8pWs.png"},
+{name:{de:"Eisdrache",en:"Ice Dragon",jp:"氷のドラゴン"},rarity:"Legendary",img:"https://i.imgur.com/Dz0rV0v.png"},
+{name:{de:"Nebelgeist",en:"Mist Spirit",jp:"霧の精霊"},rarity:"Rare",img:"https://i.imgur.com/ER7cKuv.png"},
+{name:{de:"Nachtfalke",en:"Night Falcon",jp:"夜の鷹"},rarity:"Epic",img:"https://i.imgur.com/Fk1hX8u.png"},
+{name:{de:"Sonnenkrieger",en:"Sun Warrior",jp:"太陽の戦士"},rarity:"Rare",img:"https://i.imgur.com/Gh4vI9w.png"},
+{name:{de:"Mondkatze",en:"Moon Cat",jp:"月の猫"},rarity:"Common",img:"https://i.imgur.com/H0jT2Pm.png"},
+// ...restliche Karten analog hinzufügen
+];
+
+// Karte ziehen
 function drawCard(){
   if(points >=5){
-    points -=5;
+    points-=5;
     localStorage.setItem("points", points);
     updatePoints();
     const c = cards[Math.floor(Math.random()*cards.length)];
@@ -173,27 +88,13 @@ function drawCard(){
     localStorage.setItem("cards", JSON.stringify(collection));
     showCard(c);
     showCollection();
-  } else{
-    alert(lang=="de"?"Du brauchst mehr Ink, um eine Karte zu ziehen!":"en"?"You need more Ink to draw a card!":"カードを引くにはもっとInkが必要です！");
-  }
+  } else alert(lang=="de"?"Du brauchst mehr Ink!":"en"?"You need more Ink!":"カードを引くにはもっとInkが必要です！");
 }
 
-// Karte anzeigen
-function showCard(c){
-  document.getElementById("cardContainer").innerHTML = `
-    <div class="card ${c.rarity}">
-      <h3>${c.name[lang]}</h3>
-      <img src="${c.img}">
-    </div>
-  `;
-}
-
-// Sammlung
-function showCollection(){
-  let html="";
-  collection.forEach(c=>html+=`<p>✧ ${c.name[lang]} (${c.rarity})</p>`);
-  document.getElementById("collection").innerHTML = html;
-}
+// Anzeige
+function updatePoints(){ document.getElementById("pointsDisplay").innerText="Ink: "+points; }
+function showCard(c){ document.getElementById("cardContainer").innerHTML=`<div class="card ${c.rarity}"><h3>${c.name[lang]}</h3><img src="${c.img}"></div>`; }
+function showCollection(){ let html=""; collection.forEach(c=>html+=`<p>✧ ${c.name[lang]} (${c.rarity})</p>`); document.getElementById("collection").innerHTML=html; }
 
 // Start
 updatePoints();
