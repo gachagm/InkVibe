@@ -15,15 +15,11 @@ body {
   font-family: 'Orbitron', 'Noto Sans JP', sans-serif;
   text-align: center;
 }
-
-/* Glow Titel */
 h1 {
   margin-top: 20px;
   font-size: 2.5em;
   text-shadow: 0 0 20px #6366f1;
 }
-
-/* Buttons & Select */
 button, select {
   padding: 10px 15px;
   margin: 10px;
@@ -35,19 +31,14 @@ button, select {
   cursor: pointer;
   transition: 0.2s;
 }
-
 button:hover {
   background: #6366f1;
   box-shadow: 0 0 15px #6366f1;
 }
-
-/* Punkte-Anzeige */
 #pointsDisplay {
   font-size: 18px;
   margin-top: 15px;
 }
-
-/* Karte */
 .card {
   margin-top: 20px;
   padding: 15px;
@@ -59,30 +50,23 @@ button:hover {
   display: inline-block;
   animation: fadeIn 0.5s ease;
 }
-
 .card img {
   width: 100%;
   border-radius: 10px;
 }
-
 .card h3 {
   margin: 10px 0;
 }
-
-/* Sammlung */
 #collection p {
   opacity: 0.8;
   font-size: 14px;
 }
-
-/* Animation */
 @keyframes fadeIn {
   from {opacity:0; transform: scale(0.8);}
   to {opacity:1; transform: scale(1);}
 }
 </style>
 </head>
-
 <body>
 
 <h1>✦ InkVibe ✦</h1>
@@ -96,7 +80,7 @@ button:hover {
 <br>
 
 <p id="pointsDisplay">Ink: 0</p>
-<button onclick="doAction()">Aktion machen +1 Ink</button>
+<button onclick="collectDailyInk()" id="dailyBtn">Tägliche Ink holen</button>
 <button onclick="drawCard()" id="drawBtn">Karte ziehen (5 Ink)</button>
 
 <div id="cardContainer"></div>
@@ -108,70 +92,68 @@ button:hover {
 // 🌍 Sprache
 let lang = "de";
 const text = {
-  de: { draw: "Karte ziehen (5 Ink)", action: "Aktion machen +1 Ink" },
-  en: { draw: "Draw Card (5 Ink)", action: "Do Action +1 Ink" },
-  jp: { draw: "カードを引く（Ink 5）", action: "アクション +1 Ink" }
+  de: { draw: "Karte ziehen (5 Ink)", daily: "Tägliche Ink holen" },
+  en: { draw: "Draw Card (5 Ink)", daily: "Collect Daily Ink" },
+  jp: { draw: "カードを引く（Ink 5）", daily: "毎日のInkを受け取る" }
 };
 
+// 🔹 Sprache wechseln
 function changeLang(l) {
   lang = l;
   document.getElementById("drawBtn").innerText = text[lang].draw;
-  document.getElementById("actionBtn").innerText = text[lang].action;
+  document.getElementById("dailyBtn").innerText = text[lang].daily;
   showCollection();
 }
 
-// 🃏 Karten
-const cards = [
-{
-  name: {de:"Feuerdrache", en:"Fire Dragon", jp:"火のドラゴン"},
-  img: "https://picsum.photos/200?random=1"
-},
-{
-  name: {de:"Wassergeist", en:"Water Spirit", jp:"水の精霊"},
-  img: "https://picsum.photos/200?random=2"
-},
-{
-  name: {de:"Schattenwolf", en:"Shadow Wolf", jp:"影のオオカミ"},
-  img: "https://picsum.photos/200?random=3"
+// 🃏 30 Karten
+const cards = [];
+for(let i=1;i<=30;i++){
+  cards.push({
+    name: {de:"Karte "+i, en:"Card "+i, jp:"カード "+i},
+    img: "https://picsum.photos/200?random="+i
+  });
 }
-];
 
 // 💾 Speicher
 let collection = JSON.parse(localStorage.getItem("cards")) || [];
 let points = Number(localStorage.getItem("points")) || 0;
 
-// 🔹 Aktion +1 Ink
-function doAction() {
-  points += 1;
-  localStorage.setItem("points", points);
-  updatePoints();
-}
+// 🔹 Punkte anzeigen
+function updatePoints(){ document.getElementById("pointsDisplay").innerText = "Ink: " + points; }
 
-function updatePoints() {
-  document.getElementById("pointsDisplay").innerText = "Ink: " + points;
+// 🔹 Tägliche Ink (10 pro Tag)
+function collectDailyInk(){
+  const today = new Date().toISOString().slice(0,10); // yyyy-mm-dd
+  const lastClaim = localStorage.getItem("lastDaily") || "";
+  if(lastClaim !== today){
+    points += 10;
+    localStorage.setItem("points", points);
+    localStorage.setItem("lastDaily", today);
+    updatePoints();
+    alert(lang=="de"?"Du hast 10 Ink erhalten!":"en"?"You received 10 Ink!":"10 Inkを獲得しました！");
+  } else {
+    alert(lang=="de"?"Du hast heute schon Ink gesammelt!":"en"?"You already collected Ink today!":"今日のInkはもう受け取り済みです！");
+  }
 }
 
 // 🔹 Karte ziehen (5 Ink)
-function drawCard() {
-  if(points >= 5){
-    points -= 5;
+function drawCard(){
+  if(points >=5){
+    points -=5;
     localStorage.setItem("points", points);
     updatePoints();
-    
-    let c = cards[Math.floor(Math.random()*cards.length)];
+    const c = cards[Math.floor(Math.random()*cards.length)];
     collection.push(c);
     localStorage.setItem("cards", JSON.stringify(collection));
     showCard(c);
     showCollection();
-  } else {
-    alert(lang=="de" ? "Du brauchst mehr Ink, um eine Karte zu ziehen!" : 
-          lang=="en" ? "You need more Ink to draw a card!" : 
-          "カードを引くにはもっとInkが必要です！");
+  } else{
+    alert(lang=="de"?"Du brauchst mehr Ink, um eine Karte zu ziehen!":"en"?"You need more Ink to draw a card!":"カードを引くにはもっとInkが必要です！");
   }
 }
 
-// 🔹 Anzeige Karte
-function showCard(c) {
+// 🔹 Karte anzeigen
+function showCard(c){
   document.getElementById("cardContainer").innerHTML = `
     <div class="card">
       <h3>${c.name[lang]}</h3>
@@ -180,12 +162,10 @@ function showCard(c) {
   `;
 }
 
-// 🔹 Sammlung anzeigen
-function showCollection() {
-  let html = "";
-  collection.forEach(c => {
-    html += `<p>✧ ${c.name[lang]}</p>`;
-  });
+// 🔹 Sammlung
+function showCollection(){
+  let html="";
+  collection.forEach(c=>html+=`<p>✧ ${c.name[lang]}</p>`);
   document.getElementById("collection").innerHTML = html;
 }
 
