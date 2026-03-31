@@ -2,80 +2,72 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>InkVibe - Anime Card Game</title>
+<title>InkVibe</title>
 
 <style>
-body {
+body{
   margin:0;
-  background: radial-gradient(circle at top, #1e293b, #020617);
+  background:linear-gradient(180deg,#020617,#0f172a);
   color:white;
   font-family:sans-serif;
   text-align:center;
 }
 
-h1 {
-  margin-top:20px;
-  font-size:2.8em;
-  text-shadow:0 0 25px #6366f1;
+h1{
+  font-size:3em;
+  text-shadow:0 0 30px #6366f1;
 }
 
-button, select {
-  padding:10px 15px;
-  margin:10px;
+.panel{
+  background:#0f172a;
+  margin:15px;
+  padding:15px;
+  border-radius:15px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+button{
+  padding:12px;
+  margin:5px;
   border:none;
   border-radius:10px;
   background:#6366f1;
   color:white;
   cursor:pointer;
-  transition:0.2s;
-}
-button:hover {
-  transform:scale(1.05);
-  background:#818cf8;
 }
 
-#pointsDisplay {
-  margin-top:15px;
-  font-size:1.2em;
+button:hover{
+  background:#818cf8;
+  transform:scale(1.05);
 }
 
 /* Karten */
-.card {
+.card{
+  display:inline-block;
+  width:140px;
   margin:10px;
   padding:10px;
-  width:150px;
-  border-radius:15px;
-  display:inline-block;
+  border-radius:12px;
   border:3px solid white;
-  transition:0.3s;
   cursor:pointer;
 }
-.card:hover {
-  transform:scale(1.1);
-}
 
-.selected {
+.selected{
   outline:4px solid #22c55e;
-  transform:scale(1.15);
 }
 
-.Common { border-color:gray; }
-.Rare { border-color:#3b82f6; }
-.Epic { border-color:#a855f7; }
-.Legendary {
+.Common{border-color:gray;}
+.Rare{border-color:#3b82f6;}
+.Epic{border-color:#a855f7;}
+.Legendary{
   border-color:gold;
-  box-shadow:0 0 20px gold;
+  box-shadow:0 0 25px gold;
 }
 
-.card img {
-  width:100%;
-  border-radius:10px;
-}
-
-/* Anzeige */
-#battleArea {
-  margin-top:20px;
-  padding:15px;
+#drawAnimation{
+  font-size:2em;
+  margin:20px;
+  height:40px;
 }
 </style>
 </head>
@@ -84,145 +76,163 @@ button:hover {
 
 <h1>✦ InkVibe ✦</h1>
 
-<p id="pointsDisplay">Ink: 0</p>
+<div class="panel">
+<p id="points">Ink: 0</p>
+<button onclick="collectDaily()">Daily</button>
+<button onclick="draw()">Draw (5)</button>
+<button onclick="fight()">Fight</button>
+<button onclick="goLogin()">Login Schulaccount</button>
+</div>
 
-<button onclick="collectDailyInk()">Tägliche Ink</button>
-<button onclick="drawCard()">Karte ziehen (5 Ink)</button>
-<button onclick="fight()">Kämpfen</button>
+<div id="drawAnimation"></div>
 
-<div id="battleArea"></div>
-
-<h2>Sammlung (Klick = auswählen)</h2>
+<div class="panel">
+<h2>Collection</h2>
 <div id="collection"></div>
+</div>
 
 <script>
 
-// Punkte & Speicherung
-let points = Number(localStorage.getItem("points")) || 0;
-let collection = JSON.parse(localStorage.getItem("cards")) || {};
-let selectedCard = null;
+// Speicher
+let points = Number(localStorage.getItem("points"))||0;
+let collection = JSON.parse(localStorage.getItem("cards"))||{};
+let selected = null;
+let loggedIn = localStorage.getItem("loggedIn")==="true";
 
-// Karten mit Stärke
-const cards = [
-  {name:"Feuerdrache",rarity:"Legendary",power:20,img:"1.png"},
-  {name:"Wassergeist",rarity:"Epic",power:14,img:"2.png"},
-  {name:"Schattenwolf",rarity:"Rare",power:10,img:"3.png"},
-  {name:"Lichtfee",rarity:"Common",power:5,img:"4.png"},
-  {name:"Eisdrache",rarity:"Legendary",power:22,img:"6.png"},
-  {name:"Nachtelfe",rarity:"Legendary",power:18,img:"18.png"}
+// Karten (Legendary stärker)
+const cards=[
+{name:"Feuerdrache",rarity:"Legendary",power:30},
+{name:"Eisdrache",rarity:"Legendary",power:28},
+{name:"Nachtelfe",rarity:"Legendary",power:26},
+
+{name:"Wassergeist",rarity:"Epic",power:18},
+{name:"Flammenfuchs",rarity:"Epic",power:17},
+
+{name:"Schattenwolf",rarity:"Rare",power:12},
+{name:"Sonnenkrieger",rarity:"Rare",power:11},
+
+{name:"Lichtfee",rarity:"Common",power:6},
+{name:"Mondkatze",rarity:"Common",power:5}
 ];
 
 // Gegner
-const enemies = [
-  {name:"Goblin",strength:6},
-  {name:"Ork",strength:10},
-  {name:"Dämon",strength:15},
-  {name:"Drache",strength:25}
+const enemies=[
+{name:"Goblin",strength:8},
+{name:"Ork",strength:12},
+{name:"Dämon",strength:18},
+{name:"Drache",strength:30}
 ];
 
-// Zufallskarte
-function getRandomCard(){
-  return cards[Math.floor(Math.random()*cards.length)];
+// 🎰 Gacha (SEHR SELTEN!)
+function getCard(){
+  let r=Math.random();
+
+  let rarity;
+  if(r<0.70) rarity="Common";
+  else if(r<0.90) rarity="Rare";
+  else if(r<0.99) rarity="Epic";
+  else rarity="Legendary"; // 1%!!
+
+  let pool=cards.filter(c=>c.rarity===rarity);
+  return pool[Math.floor(Math.random()*pool.length)];
 }
 
-// Daily Ink
-function collectDailyInk(){
-  points += 10;
+// Draw mit Animation
+function draw(){
+  if(points<5){alert("Not enough Ink");return;}
+  points-=5;
+
+  let anim=document.getElementById("drawAnimation");
+  let i=0;
+
+  let interval=setInterval(()=>{
+    anim.innerText=["Common","Rare","Epic","???"][Math.floor(Math.random()*4)];
+    i++;
+    if(i>10){
+      clearInterval(interval);
+      let c=getCard();
+
+      anim.innerText="✨ "+c.rarity+" ✨";
+
+      if(!collection[c.name]) collection[c.name]={...c,count:0};
+      collection[c.name].count++;
+
+      if(c.rarity==="Legendary"){
+        points+=20;
+        alert("🔥 LEGENDARY!!!");
+      }
+
+      save();
+      render();
+    }
+  },100);
+}
+
+// Daily
+function collectDaily(){
+  let bonus=10;
+  if(loggedIn) bonus+=5;
+  points+=bonus;
   save();
-  alert("Du hast 10 Ink bekommen!");
 }
 
-// Karte ziehen
-function drawCard(){
-  if(points < 5){
-    alert("Nicht genug Ink!");
-    return;
-  }
-
-  points -= 5;
-  const c = getRandomCard();
-
-  if(collection[c.name]) collection[c.name].count++;
-  else collection[c.name] = {...c, count:1};
-
-  if(c.rarity==="Legendary"){
-    points += 10;
-    alert("🔥 LEGENDARY BONUS!");
-  }
-
-  save();
-  showCollection();
-}
-
-// Karte auswählen
-function selectCard(name){
-  selectedCard = collection[name];
-  showCollection();
-}
-
-// Kampf
+// Fight
 function fight(){
-  if(!selectedCard){
-    alert("Wähle eine Karte!");
-    return;
-  }
+  if(!selected){alert("Select card");return;}
 
-  const enemy = enemies[Math.floor(Math.random()*enemies.length)];
+  let enemy=enemies[Math.floor(Math.random()*enemies.length)];
 
-  const result = selectedCard.power >= enemy.strength;
+  let power=selected.power;
+  if(loggedIn) power+=3;
 
-  let text = `
-Gegner: ${enemy.name} (${enemy.strength})
-Deine Karte: ${selectedCard.name} (${selectedCard.power})
-`;
+  if(power>=enemy.strength){
+    alert("Win!");
+    points+=5;
+  } else alert("Lose!");
 
-  if(result){
-    points += 5;
-    text += "\n🏆 Gewonnen!";
-  } else {
-    text += "\n💀 Verloren!";
-  }
-
-  alert(text);
   save();
 }
 
-// UI aktualisieren
-function showCollection(){
-  let html = "";
+// Auswahl
+function selectCard(n){
+  selected=collection[n];
+  render();
+}
 
+// Anzeige
+function render(){
+  document.getElementById("points").innerText="Ink: "+points;
+
+  let html="";
   Object.values(collection).forEach(c=>{
-    html += `
-    <div class="card ${c.rarity} ${selectedCard?.name===c.name?"selected":""}"
-         onclick="selectCard('${c.name}')">
-      <h4>${c.name}</h4>
-      <img src="${c.img}">
-      <p>${c.rarity}</p>
-      <p>⚔️ ${c.power}</p>
-      <p>x${c.count}</p>
+    html+=`
+    <div class="card ${c.rarity} ${selected?.name===c.name?"selected":""}"
+    onclick="selectCard('${c.name}')">
+    ${c.name}<br>
+    ⚔️ ${c.power}<br>
+    x${c.count}
     </div>`;
   });
 
-  document.getElementById("collection").innerHTML = html;
+  document.getElementById("collection").innerHTML=html;
 }
 
-// Speichern
+// Save
 function save(){
-  localStorage.setItem("points", points);
-  localStorage.setItem("cards", JSON.stringify(collection));
-  updatePoints();
+  localStorage.setItem("points",points);
+  localStorage.setItem("cards",JSON.stringify(collection));
+  localStorage.setItem("loggedIn",loggedIn);
+  render();
 }
 
-// Punkte anzeigen
-function updatePoints(){
-  document.getElementById("pointsDisplay").innerText = "Ink: " + points;
+// Login Seite öffnen
+function goLogin(){
+  window.location.href="login.html";
 }
 
 // Start
-updatePoints();
-showCollection();
+render();
 
 </script>
-
 </body>
 </html>
