@@ -3,586 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InkVibe - Mystic Edition</title>
-  <meta name="description" content="InkVibe - Mystic Edition | Ein mystisches Gacha- und Sammelkartenspiel im Browser." />
-
-  <style>
-    :root {
-      --bg-1: #0b1020;
-      --bg-2: #11182d;
-      --card: rgba(255, 255, 255, 0.08);
-      --card-strong: rgba(255, 255, 255, 0.12);
-      --border: rgba(255, 255, 255, 0.12);
-      --text: #f4f7ff;
-      --muted: #aeb8d6;
-      --accent: #8b5cf6;
-      --accent-2: #06b6d4;
-      --accent-3: #ec4899;
-      --gold: #fbbf24;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 16px;
-      --radius-sm: 12px;
-      --blur: blur(16px);
-      --max-width: 1200px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(139, 92, 246, 0.25), transparent 30%),
-        radial-gradient(circle at top right, rgba(6, 182, 212, 0.18), transparent 28%),
-        radial-gradient(circle at bottom center, rgba(236, 72, 153, 0.12), transparent 30%),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2));
-      color: var(--text);
-      min-height: 100%;
-      overflow-x: hidden;
-    }
-
-    body {
-      padding: 24px;
-    }
-
-    .page {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 28px;
-      padding: 18px 22px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: var(--blur);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .brand-logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 1.5rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.35);
-    }
-
-    .brand h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-    }
-
-    .brand p {
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-top: 2px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .lang-switch {
-      display: flex;
-      gap: 8px;
-      padding: 6px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-    }
-
-    .lang-switch button {
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      padding: 8px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-weight: 600;
-    }
-
-    .lang-switch button:hover,
-    .lang-switch button.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: var(--text);
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-
-    .hero-card,
-    .side-card,
-    .panel,
-    .feature-card {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: var(--blur);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-    }
-
-    .hero-card {
-      padding: 36px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-card::before {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.35), transparent 70%);
-      border-radius: 999px;
-      pointer-events: none;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(139, 92, 246, 0.16);
-      color: #ddd6fe;
-      font-weight: 700;
-      font-size: 0.9rem;
-      margin-bottom: 18px;
-      border: 1px solid rgba(139, 92, 246, 0.25);
-    }
-
-    .hero h2 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.04;
-      margin-bottom: 16px;
-      font-weight: 900;
-      letter-spacing: -1px;
-    }
-
-    .hero h2 span {
-      background: linear-gradient(135deg, #c4b5fd, #67e8f9, #f9a8d4);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      color: var(--muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-      max-width: 65ch;
-      margin-bottom: 28px;
-    }
-
-    .hero-buttons {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 14px 20px;
-      border-radius: 16px;
-      border: 1px solid transparent;
-      text-decoration: none;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.2s ease;
-      min-height: 52px;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: white;
-      box-shadow: 0 14px 30px rgba(139, 92, 246, 0.28);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text);
-      border-color: var(--border);
-    }
-
-    .wiki-link {
-      background: linear-gradient(135deg, rgba(236, 72, 153, 0.18), rgba(139, 92, 246, 0.18));
-      border-color: rgba(236, 72, 153, 0.22);
-    }
-
-    .side-card {
-      padding: 26px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .stat-box {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 22px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 2.2rem;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .stat-value .ink {
-      color: var(--gold);
-    }
-
-    .stat-note {
-      margin-top: 10px;
-      color: #c7d2fe;
-      font-size: 0.92rem;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .feature-card {
-      padding: 22px;
-      transition: 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .feature-icon {
-      width: 54px;
-      height: 54px;
-      border-radius: 18px;
-      display: grid;
-      place-items: center;
-      font-size: 1.35rem;
-      margin-bottom: 18px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border);
-    }
-
-    .feature-card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
-      font-weight: 800;
-    }
-
-    .feature-card p {
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 18px;
-      font-size: 0.96rem;
-    }
-
-    .feature-card .btn {
-      width: 100%;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-
-    .section-title h2 {
-      font-size: 1.45rem;
-      font-weight: 900;
-    }
-
-    .section-title p {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .bottom-panels {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-
-    .panel {
-      padding: 26px;
-    }
-
-    .panel h3 {
-      font-size: 1.2rem;
-      margin-bottom: 14px;
-      font-weight: 800;
-    }
-
-    .panel p,
-    .panel li {
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 0.97rem;
-    }
-
-    .panel ul {
-      list-style: none;
-      display: grid;
-      gap: 12px;
-      margin-top: 12px;
-    }
-
-    .panel li {
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.92rem;
-      padding: 10px 0 24px;
-    }
-
-    @media (max-width: 1024px) {
-      .hero,
-      .bottom-panels,
-      .quick-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 760px) {
-      body {
-        padding: 16px;
-      }
-
-      .topbar,
-      .hero,
-      .bottom-panels,
-      .quick-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .top-actions {
-        justify-content: space-between;
-      }
-
-      .hero-card,
-      .side-card,
-      .panel,
-      .feature-card {
-        border-radius: 24px;
-      }
-
-      .hero-card {
-        padding: 28px 22px;
-      }
-
-      .hero h2 {
-        font-size: 2.1rem;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-    }
-  </style>
+  <title>InkVibe — Mystic Edition</title>
+  <meta name="description" content="InkVibe — Mystic Edition | Sammle mystische Karten, ziehe seltene Charaktere und kämpfe im Browser." />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="page">
+  <div class="bg-layer">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+    <div class="grid-overlay"></div>
+  </div>
 
-    <!-- TOPBAR -->
-    <header class="topbar">
+  <div class="app-shell">
+
+    <header class="topbar glass">
       <div class="brand">
-        <div class="brand-logo">🖋️</div>
-        <div>
-          <h1>InkVibe - Mystic Edition</h1>
-          <p>Collect. Draw. Fight. Discover the mystic ink world.</p>
+        <div class="brand-mark">🖋️</div>
+        <div class="brand-copy">
+          <h1>InkVibe</h1>
+          <p>Mystic Edition</p>
         </div>
       </div>
 
-      <div class="top-actions">
-        <div class="lang-switch">
-          <button class="active">DE</button>
-          <button>EN</button>
-          <button>JP</button>
-        </div>
-        <a href="login.html" class="btn btn-secondary">🔐 Login</a>
-      </div>
+      <nav class="top-nav">
+        <a href="#draw-zone">Draw</a>
+        <a href="#fight-zone">Fight</a>
+        <a href="#collection-zone">Collection</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="login.html" class="nav-login">Login</a>
+      </nav>
     </header>
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-card">
-        <div class="badge">✨ Mystic Gacha Adventure</div>
-        <h2>Willkommen in der <span>Welt von InkVibe</span></h2>
-        <p>
-          Sammle mystische Karten, nutze dein Ink für Draws, kämpfe gegen Gegner
-          und erweitere deine Collection. Entdecke Geheimnisse, Seltenheiten und
-          neue Vibes in einer dunklen, magischen Browserwelt.
-        </p>
+    <main>
 
-        <div class="hero-buttons">
-          <a href="#game-actions" class="btn btn-primary">🎮 Jetzt spielen</a>
-          <a href="wiki.html" class="btn btn-secondary wiki-link">📖 Zum Wiki</a>
-        </div>
-      </div>
+      <!-- HERO -->
+      <section class="hero-grid">
+        <div class="hero-main glass">
+          <div class="hero-badge">✨ Mystic Gacha Adventure</div>
+          <h2>Draw the <span>Unknown</span></h2>
+          <p>
+            Sammle mystische Karten, baue deine Collection aus, ziehe seltene
+            Wesen aus dem Ink und stelle dich dunklen Gegnern im Kampf.
+          </p>
 
-      <aside class="side-card">
-        <div class="stat-box">
-          <div class="stat-label">Dein aktuelles Ink</div>
-          <div class="stat-value"><span class="ink">🟡</span> <span id="inkCount">0</span></div>
-          <div class="stat-note">Nutze Ink für Draws, Kämpfe und Fortschritt.</div>
-        </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="hero-stat-label">Ink</span>
+              <span class="hero-stat-value" id="inkCount">0</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-label">Collection</span>
+              <span class="hero-stat-value" id="collectionCount">0</span>
+            </div>
+            <div class="hero-stat">
+              <span class="hero-stat-label">Selected</span>
+              <span class="hero-stat-value" id="selectedCardName">None</span>
+            </div>
+          </div>
 
-        <div class="stat-box">
-          <div class="stat-label">Tagesbonus</div>
-          <div class="stat-value">🎁 Daily Draw</div>
-          <div class="stat-note">Komm täglich zurück und sichere dir neue Chancen.</div>
-        </div>
-      </aside>
-    </section>
-
-    <!-- GAME ACTIONS -->
-    <section id="game-actions">
-      <div class="section-title">
-        <div>
-          <h2>Spielmodi & Features</h2>
-          <p>Alles Wichtige auf einen Blick.</p>
-        </div>
-      </div>
-
-      <div class="quick-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🎴</div>
-          <h3>Daily Draw</h3>
-          <p>Ziehe täglich neue Karten und entdecke seltene mystische Charaktere.</p>
-          <button class="btn btn-primary" id="dailyDrawBtn">Jetzt ziehen</button>
+          <div class="hero-actions">
+            <button class="btn btn-primary btn-xl" onclick="drawCard()">
+              🎴 Draw for 5 Ink
+            </button>
+            <button class="btn btn-secondary btn-xl" onclick="claimDaily()">
+              🎁 Claim Daily
+            </button>
+          </div>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">⚔️</div>
+        <aside class="hero-side glass">
+          <div class="side-label">Last Pull</div>
+          <div id="lastPullCard" class="featured-card placeholder-card">
+            <div class="featured-card-inner">
+              <span class="featured-name">???</span>
+              <span class="featured-rarity">Unknown</span>
+            </div>
+          </div>
+          <p class="side-note">
+            Deine zuletzt gezogene Karte erscheint hier mit Rarity-Glow.
+          </p>
+        </aside>
+      </section>
+
+      <!-- QUICK ACTIONS -->
+      <section class="quick-actions">
+        <div class="quick-card glass">
+          <div class="quick-icon">🎁</div>
+          <h3>Daily Reward</h3>
+          <p>Hole dir einmal pro Tag kostenloses Ink.</p>
+          <button class="btn btn-primary" onclick="claimDaily()">Jetzt holen</button>
+        </div>
+
+        <div class="quick-card glass" id="draw-zone">
+          <div class="quick-icon">🎴</div>
+          <h3>Mystic Draw</h3>
+          <p>Ziehe neue Karten und jage Legendary Pulls.</p>
+          <button class="btn btn-primary" onclick="drawCard()">Karte ziehen</button>
+        </div>
+
+        <div class="quick-card glass" id="fight-zone">
+          <div class="quick-icon">⚔️</div>
           <h3>Fight</h3>
-          <p>Teste deine Sammlung im Kampf und verbessere deinen Fortschritt.</p>
-          <a href="#" class="btn btn-secondary" id="fightBtn">Kampf starten</a>
+          <p>Nutze deine ausgewählte Karte im Kampf.</p>
+          <button class="btn btn-secondary" onclick="fight()">Kampf starten</button>
         </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">🗂️</div>
-          <h3>Collection</h3>
-          <p>Behalte deine gezogenen Karten und seltenen Funde immer im Blick.</p>
-          <a href="#" class="btn btn-secondary" id="collectionBtn">Sammlung öffnen</a>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">📘</div>
-          <h3>InkVibe Wiki</h3>
-          <p>Erfahre mehr über Karten, Lore, Seltenheiten, Gegner und Systeme.</p>
+        <div class="quick-card glass">
+          <div class="quick-icon">📖</div>
+          <h3>Wiki</h3>
+          <p>Entdecke Lore, Karten und Seltenheiten.</p>
           <a href="wiki.html" class="btn btn-secondary">Wiki öffnen</a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- INFO PANELS -->
-    <section class="bottom-panels">
-      <div class="panel">
-        <h3>🌌 Was ist InkVibe?</h3>
-        <p>
-          InkVibe ist ein browserbasiertes Gacha- und Sammelspiel mit mystischem
-          Stil. Du sammelst Karten, investierst Ink, kämpfst und baust nach und
-          nach deine eigene Sammlung auf.
-        </p>
-      </div>
+      <!-- DRAW RESULT -->
+      <section class="section-panel glass">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">RESULT</span>
+            <h2>Draw Chamber</h2>
+          </div>
+          <p>Hier erscheint dein neuester Pull mit Seltenheit und Stärke.</p>
+        </div>
 
-      <div class="panel">
-        <h3>🧠 Schnellstart</h3>
-        <ul>
-          <li>🎁 Hol dir deinen täglichen Draw.</li>
-          <li>🎴 Sammle neue Karten und erhöhe deine Collection.</li>
-          <li>⚔️ Nutze deine Karten in Kämpfen.</li>
-          <li>📖 Schau ins Wiki für mehr Infos und Lore.</li>
-        </ul>
-      </div>
-    </section>
+        <div class="draw-result-wrap">
+          <div id="drawReveal" class="draw-reveal placeholder-card">
+            <div class="featured-card-inner">
+              <span class="featured-name">No Pull Yet</span>
+              <span class="featured-rarity">Draw to reveal</span>
+            </div>
+          </div>
 
-    <footer>
-      © 2026 InkVibe - Mystic Edition • Made with Ink, Chaos & Vibes
+          <div class="draw-meta">
+            <div class="meta-box">
+              <span class="meta-label">Name</span>
+              <span class="meta-value" id="pullName">—</span>
+            </div>
+            <div class="meta-box">
+              <span class="meta-label">Rarity</span>
+              <span class="meta-value" id="pullRarity">—</span>
+            </div>
+            <div class="meta-box">
+              <span class="meta-label">Power</span>
+              <span class="meta-value" id="pullPower">—</span>
+            </div>
+            <div class="meta-box">
+              <span class="meta-label">Owned</span>
+              <span class="meta-value" id="pullOwned">—</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FIGHT -->
+      <section class="section-panel glass fight-layout">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">BATTLE</span>
+            <h2>Fight Arena</h2>
+          </div>
+          <p>Wähle eine Karte aus deiner Collection und kämpfe gegen Schattenwesen.</p>
+        </div>
+
+        <div class="fight-grid">
+          <div class="arena-card">
+            <h3>Your Card</h3>
+            <div id="selectedFightCard" class="battle-card placeholder-card small-card">
+              <div class="featured-card-inner">
+                <span class="featured-name">No Card Selected</span>
+                <span class="featured-rarity">Choose from Collection</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="arena-vs">VS</div>
+
+          <div class="arena-card">
+            <h3>Enemy</h3>
+            <div id="enemyCard" class="battle-card enemy-card small-card">
+              <div class="featured-card-inner">
+                <span class="featured-name">Shadow Spawn</span>
+                <span class="featured-rarity">Power ?</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fight-controls">
+          <button class="btn btn-primary btn-xl" onclick="fight()">⚔️ Start Fight</button>
+          <div id="fightResult" class="fight-result">Wähle eine Karte und starte den Kampf.</div>
+        </div>
+      </section>
+
+      <!-- COLLECTION -->
+      <section class="section-panel glass" id="collection-zone">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">COLLECTION</span>
+            <h2>Your Cards</h2>
+          </div>
+          <p>Klicke auf eine Karte, um sie auszuwählen. Duplikate werden gezählt.</p>
+        </div>
+
+        <div id="collectionGrid" class="collection-grid"></div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 InkVibe — Mystic Edition • Made with Ink, Chaos & Vibes</p>
     </footer>
   </div>
 
-  <script>
-    // Beispiel: Ink aus localStorage laden (falls dein altes System das nutzt)
-    const inkCountEl = document.getElementById("inkCount");
-    const dailyDrawBtn = document.getElementById("dailyDrawBtn");
-
-    let ink = parseInt(localStorage.getItem("ink")) || 0;
-    inkCountEl.textContent = ink;
-
-    dailyDrawBtn.addEventListener("click", () => {
-      alert("Daily Draw wurde gestartet! (Hier kannst du später deine echte Draw-Logik einbauen)");
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
