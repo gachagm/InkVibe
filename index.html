@@ -2,237 +2,38 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>InkVibe</title>
-
-<style>
-body{
-  margin:0;
-  background:linear-gradient(180deg,#020617,#0f172a);
-  color:white;
-  font-family:sans-serif;
-  text-align:center;
-}
-
-h1{
-  font-size:3em;
-  text-shadow:0 0 30px #6366f1;
-}
-
-.panel{
-  background:#0f172a;
-  margin:15px;
-  padding:15px;
-  border-radius:15px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
-}
-
-button{
-  padding:12px;
-  margin:5px;
-  border:none;
-  border-radius:10px;
-  background:#6366f1;
-  color:white;
-  cursor:pointer;
-}
-
-button:hover{
-  background:#818cf8;
-  transform:scale(1.05);
-}
-
-/* Karten */
-.card{
-  display:inline-block;
-  width:140px;
-  margin:10px;
-  padding:10px;
-  border-radius:12px;
-  border:3px solid white;
-  cursor:pointer;
-}
-
-.selected{
-  outline:4px solid #22c55e;
-}
-
-.Common{border-color:gray;}
-.Rare{border-color:#3b82f6;}
-.Epic{border-color:#a855f7;}
-.Legendary{
-  border-color:gold;
-  box-shadow:0 0 25px gold;
-}
-
-#drawAnimation{
-  font-size:2em;
-  margin:20px;
-  height:40px;
-}
-</style>
+<title>InkVibe - Mystic Edition</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h1>✦ InkVibe ✦</h1>
-
-<div class="panel">
-<p id="points">Ink: 0</p>
-<button onclick="collectDaily()">Daily</button>
-<button onclick="draw()">Draw (5)</button>
-<button onclick="fight()">Fight</button>
-<button onclick="goLogin()">Login Schulaccount</button>
+<div class="header">
+  <h1>✦ InkVibe ✦</h1>
+  <select onchange="changeLang(this.value)">
+    <option value="de">Deutsch</option>
+    <option value="en">English</option>
+    <option value="jp">日本語</option>
+  </select>
 </div>
 
-<div id="drawAnimation"></div>
-
 <div class="panel">
-<h2>Collection</h2>
-<div id="collection"></div>
+  <p id="points">Ink: 0</p>
+  <div class="buttons">
+    <button onclick="collectDaily()">Daily</button>
+    <button onclick="draw()">Draw (5)</button>
+    <button onclick="fight()">Fight</button>
+    <button onclick="goLogin()">Login Schulaccount</button>
+  </div>
+  <div id="drawAnimation" class="draw-animation"></div>
 </div>
 
-<script>
+<div class="panel">
+  <h2>Collection</h2>
+  <div id="collection" class="card-container"></div>
+</div>
 
-// Speicher
-let points = Number(localStorage.getItem("points"))||0;
-let collection = JSON.parse(localStorage.getItem("cards"))||{};
-let selected = null;
-let loggedIn = localStorage.getItem("loggedIn")==="true";
+<script src="script.js"></script>
 
-// Karten (Legendary stärker)
-const cards=[
-{name:"Feuerdrache",rarity:"Legendary",power:30},
-{name:"Eisdrache",rarity:"Legendary",power:28},
-{name:"Nachtelfe",rarity:"Legendary",power:26},
-
-{name:"Wassergeist",rarity:"Epic",power:18},
-{name:"Flammenfuchs",rarity:"Epic",power:17},
-
-{name:"Schattenwolf",rarity:"Rare",power:12},
-{name:"Sonnenkrieger",rarity:"Rare",power:11},
-
-{name:"Lichtfee",rarity:"Common",power:6},
-{name:"Mondkatze",rarity:"Common",power:5}
-];
-
-// Gegner
-const enemies=[
-{name:"Goblin",strength:8},
-{name:"Ork",strength:12},
-{name:"Dämon",strength:18},
-{name:"Drache",strength:30}
-];
-
-// 🎰 Gacha (SEHR SELTEN!)
-function getCard(){
-  let r=Math.random();
-
-  let rarity;
-  if(r<0.70) rarity="Common";
-  else if(r<0.90) rarity="Rare";
-  else if(r<0.99) rarity="Epic";
-  else rarity="Legendary"; // 1%!!
-
-  let pool=cards.filter(c=>c.rarity===rarity);
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
-// Draw mit Animation
-function draw(){
-  if(points<5){alert("Not enough Ink");return;}
-  points-=5;
-
-  let anim=document.getElementById("drawAnimation");
-  let i=0;
-
-  let interval=setInterval(()=>{
-    anim.innerText=["Common","Rare","Epic","???"][Math.floor(Math.random()*4)];
-    i++;
-    if(i>10){
-      clearInterval(interval);
-      let c=getCard();
-
-      anim.innerText="✨ "+c.rarity+" ✨";
-
-      if(!collection[c.name]) collection[c.name]={...c,count:0};
-      collection[c.name].count++;
-
-      if(c.rarity==="Legendary"){
-        points+=20;
-        alert("🔥 LEGENDARY!!!");
-      }
-
-      save();
-      render();
-    }
-  },100);
-}
-
-// Daily
-function collectDaily(){
-  let bonus=10;
-  if(loggedIn) bonus+=5;
-  points+=bonus;
-  save();
-}
-
-// Fight
-function fight(){
-  if(!selected){alert("Select card");return;}
-
-  let enemy=enemies[Math.floor(Math.random()*enemies.length)];
-
-  let power=selected.power;
-  if(loggedIn) power+=3;
-
-  if(power>=enemy.strength){
-    alert("Win!");
-    points+=5;
-  } else alert("Lose!");
-
-  save();
-}
-
-// Auswahl
-function selectCard(n){
-  selected=collection[n];
-  render();
-}
-
-// Anzeige
-function render(){
-  document.getElementById("points").innerText="Ink: "+points;
-
-  let html="";
-  Object.values(collection).forEach(c=>{
-    html+=`
-    <div class="card ${c.rarity} ${selected?.name===c.name?"selected":""}"
-    onclick="selectCard('${c.name}')">
-    ${c.name}<br>
-    ⚔️ ${c.power}<br>
-    x${c.count}
-    </div>`;
-  });
-
-  document.getElementById("collection").innerHTML=html;
-}
-
-// Save
-function save(){
-  localStorage.setItem("points",points);
-  localStorage.setItem("cards",JSON.stringify(collection));
-  localStorage.setItem("loggedIn",loggedIn);
-  render();
-}
-
-// Login Seite öffnen
-function goLogin(){
-  window.location.href="login.html";
-}
-
-// Start
-render();
-
-</script>
 </body>
 </html>
