@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkVibe Wiki</title>
+  <style>
+    :root {
+      --primary: #7b2cbf;
+      --primary-dark: #5a189a;
+      --bg: #f7f4fb;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      text-align: center;
+      padding: 50px 20px 35px;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.7rem;
+    }
+
+    header p {
+      margin-top: 10px;
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .language-switcher {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .language-switcher button {
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.35);
+      color: white;
+      padding: 10px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s ease;
+    }
+
+    .language-switcher button:hover,
+    .language-switcher button.active {
+      background: white;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    main {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px 60px;
+    }
+
+    .intro-box {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .intro-box h2 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .wiki-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 22px;
+    }
+
+    .wiki-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease;
+    }
+
+    .wiki-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .wiki-card h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 1.35rem;
+    }
+
+    .wiki-card p,
+    .wiki-card li {
+      color: var(--text);
+    }
+
+    .wiki-card ul,
+    .wiki-card ol {
+      padding-left: 20px;
+      margin-bottom: 0;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .back-home a {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-weight: bold;
+      transition: 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .back-home a:hover {
+      background: var(--primary-dark);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 25px 15px 40px;
+      font-size: 0.95rem;
+    }
+
+    [data-lang] {
+      display: none;
+    }
+
+    [data-lang].active {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 2.1rem;
+      }
+
+      .intro-box h2 {
+        font-size: 1.6rem;
+      }
+
+      .language-switcher button {
+        width: 100%;
+        max-width: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>InkVibe Wiki</h1>
+    <p id="subtitle">Alles, was du über InkVibe wissen musst.</p>
+
+    <div class="language-switcher">
+      <button class="active" onclick="setLanguage('de', this)">Deutsch</button>
+      <button onclick="setLanguage('en', this)">English</button>
+      <button onclick="setLanguage('jp', this)">日本語</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Deutsch -->
+    <div data-lang="de" class="active">
+      <div class="intro-box">
+        <h2>Willkommen im InkVibe Wiki</h2>
+        <p>
+          Hier findest du Erklärungen zu den wichtigsten Funktionen, Spielsystemen und Einstiegen von InkVibe.
+        </p>
+      </div>
+
+      <div class="wiki-grid">
+        <div class="wiki-card">
+          <h3>Was ist InkVibe?</h3>
+          <p>
+            InkVibe ist ein Browser-Game, in dem du Charaktere ziehen, sammeln und in Battles einsetzen kannst.
+            Mit Daily Draws, Collection-System und Kämpfen wächst dein Fortschritt Stück für Stück.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Daily Draw</h3>
+          <p>
+            Beim Daily Draw kannst du regelmäßig neue Charaktere, Belohnungen oder besondere Inhalte erhalten.
+            Es lohnt sich, jeden Tag vorbeizuschauen.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Collection</h3>
+          <p>
+            In deiner Collection findest du alles, was du bereits gesammelt oder freigeschaltet hast.
+            So kannst du deinen Fortschritt verfolgen und neue Ziele setzen.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Fight</h3>
+          <p>
+            Im Fight-Modus kannst du deine gesammelten Charaktere einsetzen und dein Team testen.
+            Hier zeigt sich, wie stark deine Auswahl wirklich ist.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Schulaccount</h3>
+          <p>
+            Der Schulaccount ist für Nutzer gedacht, die InkVibe in einem schulischen oder organisierten Kontext verwenden.
+            Je nach System kann er zusätzliche Inhalte oder Zugänge enthalten.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Wie starte ich?</h3>
+          <ol>
+            <li>Öffne InkVibe</li>
+            <li>Melde dich an oder starte als Gast</li>
+            <li>Nutze deinen Daily Draw</li>
+            <li>Baue deine Collection aus</li>
+            <li>Teste deine Charaktere im Fight-Modus</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="back-home">
+        <a href="index.html">← Zurück zur Startseite</a>
+      </div>
+    </div>
+
+    <!-- English -->
+    <div data-lang="en">
+      <div class="intro-box">
+        <h2>Welcome to the InkVibe Wiki</h2>
+        <p>
+          Here you can find explanations for the most important features, systems, and gameplay elements of InkVibe.
+        </p>
+      </div>
+
+      <div class="wiki-grid">
+        <div class="wiki-card">
+          <h3>What is InkVibe?</h3>
+          <p>
+            InkVibe is a browser game where you can draw, collect, and use characters in battles.
+            With daily draws, a collection system, and combat features, your progress grows over time.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Daily Draw</h3>
+          <p>
+            The Daily Draw lets you receive new characters, rewards, or special content on a regular basis.
+            It is worth checking in every day.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Collection</h3>
+          <p>
+            Your Collection contains everything you have already unlocked or gathered.
+            It helps you track your progress and discover what is still missing.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Fight</h3>
+          <p>
+            In Fight mode, you can use your collected characters and test your team.
+            This is where your strategy and progress really matter.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>School Account</h3>
+          <p>
+            The School Account is intended for users who use InkVibe in a school or organized learning environment.
+            Depending on the system, it may include special access or additional features.
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>How do I start?</h3>
+          <ol>
+            <li>Open InkVibe</li>
+            <li>Log in or start as a guest</li>
+            <li>Use your Daily Draw</li>
+            <li>Build your Collection</li>
+            <li>Test your characters in Fight mode</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="back-home">
+        <a href="index.html">← Back to Home</a>
+      </div>
+    </div>
+
+    <!-- Japanese -->
+    <div data-lang="jp">
+      <div class="intro-box">
+        <h2>InkVibe Wikiへようこそ</h2>
+        <p>
+          ここでは、InkVibe の主要な機能、システム、遊び方について確認できます。
+        </p>
+      </div>
+
+      <div class="wiki-grid">
+        <div class="wiki-card">
+          <h3>InkVibeとは？</h3>
+          <p>
+            InkVibe は、キャラクターを引いて集め、バトルで使えるブラウザゲームです。
+            Daily Draw、コレクション、バトル機能を通して少しずつ進行していきます。
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Daily Draw</h3>
+          <p>
+            Daily Draw では、新しいキャラクターや報酬、特別なコンテンツを定期的に入手できます。
+            毎日チェックする価値があります。
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Collection</h3>
+          <p>
+            Collection では、これまでに入手・解放した内容を確認できます。
+            自分の進行状況を把握し、次の目標を見つけるのに役立ちます。
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>Fight</h3>
+          <p>
+            Fight モードでは、集めたキャラクターを使ってチームを試すことができます。
+            ここで戦略と育成の成果が発揮されます。
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>School Account</h3>
+          <p>
+            School Account は、学校や学習環境で InkVibe を利用するユーザー向けの機能です。
+            システムによっては特別なアクセスや追加機能が含まれる場合があります。
+          </p>
+        </div>
+
+        <div class="wiki-card">
+          <h3>始め方</h3>
+          <ol>
+            <li>InkVibe を開く</li>
+            <li>ログインするか、ゲストとして開始する</li>
+            <li>Daily Draw を使う</li>
+            <li>Collection を増やす</li>
+            <li>Fight モードでキャラクターを試す</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="back-home">
+        <a href="index.html">← ホームへ戻る</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2025 InkVibe Wiki</p>
+  </footer>
+
+  <script>
+    function setLanguage(lang, button) {
+      const sections = document.querySelectorAll('[data-lang]');
+      const buttons = document.querySelectorAll('.language-switcher button');
+      const subtitle = document.getElementById('subtitle');
+
+      sections.forEach(section => {
+        section.classList.remove('active');
+        if (section.getAttribute('data-lang') === lang) {
+          section.classList.add('active');
+        }
+      });
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      button.classList.add('active');
+
+      if (lang === 'de') {
+        document.documentElement.lang = 'de';
+        subtitle.textContent = 'Alles, was du über InkVibe wissen musst.';
+      } else if (lang === 'en') {
+        document.documentElement.lang = 'en';
+        subtitle.textContent = 'Everything you need to know about InkVibe.';
+      } else if (lang === 'jp') {
+        document.documentElement.lang = 'ja';
+        subtitle.textContent = 'InkVibeについて知っておくべきこと。';
+      }
+
+      localStorage.setItem('inkvibeWikiLanguage', lang);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('inkvibeWikiLanguage') || 'de';
+      const targetButton = [...document.querySelectorAll('.language-switcher button')]
+        .find(btn =>
+          (savedLang === 'de' && btn.textContent.includes('Deutsch')) ||
+          (savedLang === 'en' && btn.textContent.includes('English')) ||
+          (savedLang === 'jp' && btn.textContent.includes('日本語'))
+        );
+
+      if (targetButton) {
+        setLanguage(savedLang, targetButton);
+      }
+    });
+  </script>
+
+</body>
+</html>
