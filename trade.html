@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InkVibe QR Trade</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>InkVibe QR Trade</h1>
+
+  <div class="trade-container">
+
+    <!-- INVENTAR -->
+    <div class="section">
+      <h2>Dein Inventar</h2>
+      <div id="inventory"></div>
+    </div>
+
+    <!-- QR CODE -->
+    <div class="section">
+      <h2>QR-Code für Trade</h2>
+      <div id="qrcode"></div>
+      <p id="tradeStatus"></p>
+    </div>
+
+    <!-- SCANNER -->
+    <div class="section">
+      <h2>QR-Code scannen</h2>
+      <video id="preview" width="300"></video>
+      <p id="scanResult"></p>
+      <button onclick="startScanner()">Scanner starten</button>
+    </div>
+
+  </div>
+
+  <!-- QR Code Generator -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
+  <!-- QR Scanner -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <script src="trade.js"></script>
+
+</body>
+</html>
