@@ -2,14 +2,38 @@ const CARD_POOL = [
   { id: "shadow_cat", name: "Shadow Cat", rarity: "common", power: 6, quote: "A whisper in the dark." },
   { id: "ink_sprite", name: "Ink Sprite", rarity: "common", power: 7, quote: "Tiny, but never harmless." },
   { id: "dark_fox", name: "Dark Fox", rarity: "common", power: 8, quote: "Eyes like midnight glass." },
-  { id: "void_moth", name: "Void Moth", rarity: "rare", power: 12, quote: "Drawn to forgotten light." },
-  { id: "moon_hound", name: "Moon Hound", rarity: "rare", power: 13, quote: "Tracks silver dreams." },
-  { id: "glass_raven", name: "Glass Raven", rarity: "rare", power: 14, quote: "Its wings reflect secrets." },
-  { id: "ink_angel", name: "Ink Angel", rarity: "epic", power: 19, quote: "A blessing written in shadow." },
-  { id: "abyss_kitsune", name: "Abyss Kitsune", rarity: "epic", power: 21, quote: "Nine lies, one truth." },
-  { id: "crown_wisp", name: "Crown Wisp", rarity: "epic", power: 22, quote: "Royalty made of smoke." },
-  { id: "celestial_leviathan", name: "Celestial Leviathan", rarity: "legendary", power: 30, quote: "The sky bends around it." },
-  { id: "ink_empress", name: "Ink Empress", rarity: "legendary", power: 32, quote: "She writes fate in gold." }
+  { id: "void_moth", name: "Void Moth", rarity: "common", power: 12, quote: "Drawn to forgotten light." },
+  { id: "moon_hound", name: "Moon Hound", rarity: "common", power: 13, quote: "Tracks silver dreams." },
+  { id: "glass_raven", name: "Glass Raven", rarity: "common", power: 14, quote: "Its wings reflect secrets." },
+  { id: "ink_angel", name: "Ink Angel", rarity: "rare", power: 19, quote: "A blessing written in shadow." },
+  { id: "abyss_kitsune", name: "Abyss Kitsune", rarity: "rare", power: 21, quote: "Nine lies, one truth." },
+  { id: "crown_wisp", name: "Crown Wisp", rarity: "rare", power: 22, quote: "Royalty made of smoke." },
+  { id: "celestial_leviathan", name: "Celestial Leviathan", rarity: "rare", power: 30, quote: "The sky bends around it." },
+  { id: "ink_empress", name: "Ink Empress", rarity: "rare", power: 32, quote: "She writes fate in gold." },
+  { id: "boss1", name: "Boss #1 ULtra Mech", rarity: "epic", power: 45, quote: "Laser combined with metal." },
+  // EPIC
+  { id: "pulse-striker-mk2", name: "Pulse Striker MK-II", rarity: "epic", power: 42, quote: "Rhythmic blasts shatter steel." },
+  { id: "neon-gear-phantom", name: "Neon Gear Phantom", rarity: "epic", power: 44, quote: "Glows before it strikes." },
+  { id: "circuit-breaker-x", name: "Circuit Breaker X", rarity: "epic", power: 46, quote: "Overloads every system." },
+  { id: "bassline-crusher", name: "Bassline Crusher", rarity: "epic", power: 43, quote: "Feel the drop... then destruction." },
+  { id: "cyber-pulse-titan", name: "Cyber Pulse Titan", rarity: "epic", power: 47, quote: "Energy flows, enemies fall." },
+  { id: "echo-drone-zx", name: "Echo Drone ZX", rarity: "epic", power: 41, quote: "Every sound is a weapon." },
+  { id: "voltage-raptor", name: "Voltage Raptor", rarity: "epic", power: 45, quote: "Strikes faster than lightning." },
+  { id: "synthwave-guardian", name: "Synthwave Guardian", rarity: "epic", power: 48, quote: "Protects the grid at all costs." },
+  { id: "mecha-pulse-reaver", name: "Mecha Pulse Reaver", rarity: "epic", power: 44, quote: "Harvests energy from chaos." },
+  { id: "quantum-beat-enforcer", name: "Quantum Beat Enforcer", rarity: "epic", power: 49, quote: "Time bends to its rhythm." },
+
+// LEGENDARY
+  { id: "omega-bass-overlord", name: "Omega Bass Overlord", rarity: "legendary", power: 60, quote: "The final drop ends all." },
+  { id: "hyperion-mech-prime", name: "Hyperion Mech Prime", rarity: "legendary", power: 62, quote: "Engineered for domination." },
+  { id: "neural-sync-destroyer", name: "Neural Sync Destroyer", rarity: "legendary", power: 59, quote: "Mind and machine unite." },
+  { id: "galactic-pulse-emperor", name: "Galactic Pulse Emperor", rarity: "legendary", power: 65, quote: "Rules beyond the stars." },
+  { id: "void-frequency-titan", name: "Void Frequency Titan", rarity: "legendary", power: 63, quote: "Silence becomes annihilation." },
+  { id: "chrono-beat-colossus", name: "Chrono Beat Colossus", rarity: "legendary", power: 61, quote: "Controls the tempo of time." },
+  { id: "electro-nexus-sovereign", name: "Electro Nexus Sovereign", rarity: "legendary", power: 64, quote: "All power flows through it." },
+  { id: "cyberstorm-apex", name: "Cyberstorm Apex", rarity: "legendary", power: 66, quote: "Storm of circuits unleashed." },
+  { id: "singularity-soundbreaker", name: "Singularity Soundbreaker", rarity: "legendary", power: 68, quote: "One note. Total collapse." },
+  { id: "infinity-mech-warlord", name: "Infinity Mech Warlord", rarity: "legendary", power: 70, quote: "Endless power, endless war." }
 ];
 
 const ENEMY_POOL = [
@@ -17,7 +41,17 @@ const ENEMY_POOL = [
   { name: "Cursed Echo", power: [8, 14] },
   { name: "Night Stalker", power: [12, 18] },
   { name: "Void Reaper", power: [18, 24] },
-  { name: "Ink Tyrant", power: [24, 30] }
+  { name: "Ink Tyrant", power: [24, 30] },
+  { name: "Abyssal Mech Tyrant", power: [30, 42] },
+  { name: "Neon Oblivion Reaper", power: [32, 45] },
+  { name: "Cyber Doom Colossus", power: [35, 48] },
+  { name: "Void Signal Overlord", power: [31, 44] },
+  { name: "Glitchcore Devastator", power: [33, 47] },
+  { name: "Omega Dread Machine", power: [36, 50] },
+  { name: "Quantum Annihilator X", power: [34, 46] },
+  { name: "Dark Pulse Executioner", power: [30, 43] },
+  { name: "Hyperion Chaos Engine", power: [37, 52] },
+  { name: "Singularity Warbringer", power: [38, 55] }
 ];
 
 const RARITY_WEIGHTS = [
@@ -45,7 +79,7 @@ const STARTER_INK = 15;
 const DRAW_COST = 5;
 const DAILY_REWARD = 12;
 const WIN_REWARD = 7;
-const LOSE_REWARD = 2;
+const LOSE_REWARD = -10;
 
 let state = {
   ink: STARTER_INK,
@@ -53,7 +87,7 @@ let state = {
   selectedCardId: null,
   lastPullId: null,
   lastDaily: null,
-  username: "Gast"
+  username: "NewInker"
 };
 
 function saveGame() {
