@@ -686,3 +686,46 @@ button {
   border: none;
   cursor: pointer;
 }
+
+
+/* === DRAW ANIMATION === */
+
+.draw-reveal {
+  perspective: 1000px;
+}
+
+.card-flip {
+  animation: flipReveal 0.8s ease forwards;
+  transform-style: preserve-3d;
+}
+
+@keyframes flipReveal {
+  0% {
+    transform: rotateY(90deg) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: rotateY(0deg) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateY(0deg) scale(1);
+  }
+}
+
+/* Glow je nach Seltenheit */
+.rarity-glow-common {
+  box-shadow: 0 0 20px rgba(148,163,184,0.4);
+}
+
+.rarity-glow-rare {
+  box-shadow: 0 0 25px rgba(59,130,246,0.6);
+}
+
+.rarity-glow-epic {
+  box-shadow: 0 0 35px rgba(168,85,247,0.7);
+}
+
+.rarity-glow-legendary {
+  box-shadow: 0 0 50px rgba(245,158,11,0.9);
+}
