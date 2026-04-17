@@ -383,11 +383,14 @@ function fight() {
     resultEl.textContent = `🏆 ${playerCard.name} besiegt ${enemy.name}! (+${WIN_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
   } else {
     state.ink += LOSE_REWARD;
-    resultEl.textContent = `💀 ${playerCard.name} verliert gegen ${enemy.name}... (${LOSE_REWARD} Tribut-Zahlung ) [${playerRoll} vs ${enemyRoll}]`;
+    resultEl.textContent = `💀 ${playerCard.name} verliert gegen ${enemy.name}... (${LOSE_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
   }
 
+  // 🧠 Ink darf nie unter 0 fallen
+  state.ink = Math.max(0, state.ink);
+
   saveGame();
-  renderTopStats();
+  renderAll();
 }
 
 loadGame();
