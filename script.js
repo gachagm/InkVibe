@@ -380,7 +380,7 @@ function renderEnemy(enemy) {
 
 function fight() {
   const now = Date.now();
-  if (now - lastFightTime < 60000) {
+  if (now - lastFightTime < 10000) {
     document.getElementById("fightResult").textContent = "Warte kurz...";
     return;
   }
