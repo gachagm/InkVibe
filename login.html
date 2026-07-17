@@ -1,91 +1,56 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InkVibe Login</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>InkVibe Login</title>
+
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="bg-layer">
-    <div class="orb orb-a"></div>
-    <div class="orb orb-b"></div>
-    <div class="orb orb-c"></div>
-    <div class="grid-overlay"></div>
-  </div>
 
-  <div class="app-shell">
-    <header class="topbar glass">
-      <div class="brand">
-        <div class="brand-mark">🔐</div>
-        <div class="brand-copy">
-          <h1>InkVibe Login</h1>
-          <p>Local Player Profile</p>
-        </div>
-      </div>
-      <nav class="top-nav">
-        <a href="index.html">Back to Game</a>
-        <a href="wiki.html">Wiki</a>
-      </nav>
-    </header>
+<div class="app-shell">
 
-    <section class="section-panel glass" style="max-width: 720px; margin: 40px auto;">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">PROFILE</span>
-          <h2>Choose your Name</h2>
-        </div>
-        <p>Dieser Login speichert nur lokal im Browser. Kein echter Account-Server.</p>
-      </div>
+<section class="section-panel glass">
 
-      <div style="display:grid; gap:16px;">
-        <input id="usernameInput" type="text" placeholder="z. B. InkMaster" style="
-          width:100%;
-          padding:18px 20px;
-          border-radius:18px;
-          border:1px solid rgba(255,255,255,0.12);
-          background:rgba(255,255,255,0.06);
-          color:white;
-          font-size:1rem;
-          outline:none;
-        " />
-        <button class="btn btn-primary btn-xl" onclick="saveUsername()">💾 Save Username</button>
-        <button class="btn btn-secondary btn-xl" onclick="resetSave()">🗑️ Reset Full Save</button>
-      </div>
+<h2>🖋️ InkVibe Login</h2>
 
-      <div id="loginStatus" style="margin-top:20px; color: var(--muted); font-weight:700;">
-        Current User: NewInky
-      </div>
-    </section>
-  </div>
+<input id="email" type="email" placeholder="Email">
 
-  <script>
-    function refreshUser() {
-      const user = localStorage.getItem("inkvibe_user") || "Gast";
-      document.getElementById("loginStatus").textContent = "Current User: " + user;
-      document.getElementById("usernameInput").value = user === "Gast" ? "" : user;
-    }
+<br><br>
 
-    function saveUsername() {
-      const name = document.getElementById("usernameInput").value.trim();
-      if (!name) {
-        alert("Bitte gib einen Namen ein.");
-        return;
-      }
-      localStorage.setItem("inkvibe_user", name);
-      refreshUser();
-      alert("Username gespeichert!");
-    }
+<input id="password" type="password" placeholder="Passwort">
 
-    function resetSave() {
-      const ok = confirm("Willst du wirklich deinen kompletten InkVibe-Spielstand löschen?");
-      if (!ok) return;
+<br><br>
 
-      localStorage.removeItem("inkvibe_save");
-      alert("Spielstand gelöscht. Du kannst jetzt zurück ins Spiel.");
-    }
+<button class="btn btn-primary" id="registerBtn">
+Registrieren
+</button>
 
-    refreshUser();
-  </script>
+
+<button class="btn btn-secondary" id="loginBtn">
+Login
+</button>
+
+
+<button class="btn btn-secondary" id="logoutBtn">
+Logout
+</button>
+
+
+<p id="status">
+Nicht eingeloggt
+</p>
+
+
+</section>
+
+</div>
+
+
+<script type="module" src="login.js"></script>
+
 </body>
 </html>
