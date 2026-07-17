@@ -1,5 +1,5 @@
 import { supabase } from "./supabase.js";
-
+console.log("InkVibe Login geladen");
 
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
