@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InkVibe PvP Arena</title>
+    <link rel="stylesheet" href="pvp.css">
+</head>
+
+<body>
+
+    <h1>⚔️ InkVibe PvP Arena</h1>
+
+    <div class="arena">
+
+        <div class="player">
+            <h2>Spieler 1</h2>
+            <p id="player1Status">Nicht verbunden</p>
+        </div>
+
+        <div class="vs">
+            VS
+        </div>
+
+        <div class="player">
+            <h2>Spieler 2</h2>
+            <p id="player2Status">Nicht verbunden</p>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button onclick="createRoom()">
+            Raum erstellen
+        </button>
+
+        <input id="roomCode" placeholder="Raumcode">
+
+        <button onclick="joinRoom()">
+            Beitreten
+        </button>
+    </div>
+
+    <div id="message">
+        Warte auf Spieler...
+    </div>
+
+
+<script src="pvp.js"></script>
+
+</body>
+</html>
