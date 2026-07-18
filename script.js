@@ -48,9 +48,9 @@ const ENEMY_POOL = [
   { name: "Glitchcore Devastator", power: [33, 47] },
   { name: "Omega Dread Machine", power: [36, 50] },
   { name: "Quantum Annihilator X", power: [34, 46] },
-  { name: "Dark Pulse Executioner", power: [30, 43] },
-  { name: "Hyperion Chaos Engine", power: [37, 52] },
-  { name: "Singularity Warbringer", power: [38, 1000] }
+  { name: "Dark Pulse Executioner", power: [30, 50] },
+  { name: "Hyperion Chaos Engine", power: [37, 60] },
+  { name: "Singularity Warbringer", power: [38, 70] }
 ];
 
 const RARITY_WEIGHTS = [
