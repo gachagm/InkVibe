@@ -44,7 +44,37 @@
     <div id="message">
         Warte auf Spieler...
     </div>
+<div class="battle-area">
 
+    <h2>⚔️ Kampf</h2>
+
+    <div>
+        <h3>Deine Aktion</h3>
+
+        <button onclick="chooseAction('attack')">
+            ⚔️ Angriff
+        </button>
+
+        <button onclick="chooseAction('defend')">
+            🛡 Verteidigen
+        </button>
+
+        <button onclick="chooseAction('skill')">
+            ✨ Fähigkeit
+        </button>
+
+    </div>
+
+
+    <h3 id="round">
+        Runde: 1
+    </h3>
+
+    <p id="battleMessage">
+        Wähle deine Aktion.
+    </p>
+
+</div>
 
 <script src="pvp.js"></script>
 
