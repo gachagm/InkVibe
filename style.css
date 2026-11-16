@@ -1,3 +1,54 @@
+/* Grundstyling für die Schneeflocken */
+.snowflake {
+  color: #fff;
+  font-size: 1.2em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Sorgt für Sichtbarkeit auf hellem Hintergrund */
+  position: fixed;
+  top: -10%;
+  z-index: 9999;
+  user-select: none;
+  cursor: default;
+  pointer-events: none; /* Wichtig: Man kann durch die Flocken hindurchklicken */
+  animation-name: snowflakes-fall, snowflakes-shake;
+  animation-duration: 10s, 3s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running;
+}
+
+/* Animation 1: Nach unten fallen */
+@keyframes snowflakes-fall {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Animation 2: Leichtes Hin- und Herschwingen */
+@keyframes snowflakes-shake {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(80px);
+  }
+}
+
+/* Individuelle Positionierung und Verzögerung für jede Flocke */
+.snowflake:nth-of-type(1) { left: 5%; animation-delay: 0s, 0s; }
+.snowflake:nth-of-type(2) { left: 15%; animation-delay: 6s, 0.5s; font-size: 1.5em; }
+.snowflake:nth-of-type(3) { left: 25%; animation-delay: 4s, 2s; }
+.snowflake:nth-of-type(4) { left: 35%; animation-delay: 2s, 2s; font-size: 0.9em; }
+.snowflake:nth-of-type(5) { left: 45%; animation-delay: 8s, 3s; }
+.snowflake:nth-of-type(6) { left: 55%; animation-delay: 6s, 2s; font-size: 1.4em; }
+.snowflake:nth-of-type(7) { left: 65%; animation-delay: 2.5s, 1s; }
+.snowflake:nth-of-type(8) { left: 75%; animation-delay: 1s, 0s; font-size: 1.1em; }
+.snowflake:nth-of-type(9) { left: 85%; animation-delay: 3s, 1.5s; }
+.snowflake:nth-of-type(10) { left: 92%; animation-delay: 5s, 2.5s; font-size: 1.3em; }
+
 :root {
   --bg-1: #070b15;
   --bg-2: #10172b;
