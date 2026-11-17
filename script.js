@@ -1,3 +1,4 @@
+
 const CARD_POOL = [
   { id: "shadow_cat", name: "Shadow Cat", rarity: "common", power: 6, quote: "A whisper in the dark." },
   { id: "ink_sprite", name: "Ink Sprite", rarity: "common", power: 7, quote: "Tiny, but never harmless." },
@@ -32,8 +33,36 @@ const CARD_POOL = [
   { id: "electro-nexus-sovereign", name: "Electro Nexus Sovereign", rarity: "legendary", power: 64, quote: "All power flows through it." },
   { id: "cyberstorm-apex", name: "Cyberstorm Apex", rarity: "legendary", power: 66, quote: "Storm of circuits unleashed." },
   { id: "singularity-soundbreaker", name: "Singularity Soundbreaker", rarity: "legendary", power: 68, quote: "One note. Total collapse." },
-  { id: "infinity-mech-warlord", name: "Infinity Mech Warlord", rarity: "legendary", power: 70, quote: "Endless power, endless war." }
+  { id: "infinity-mech-warlord", name: "Infinity Mech Warlord", rarity: "legendary", power: 70, quote: "Endless power, endless war." },
+
+  // ❄️ SNOW THEME - COMMON
+  { id: "snow_bunny", name: "Snow Bunny", rarity: "common", power: 3, quote: "Small paws in fresh snow." },
+  { id: "ice_mouse", name: "Ice Mouse", rarity: "common", power: 4, quote: "Hides beneath frozen leaves." },
+  { id: "frost_fox", name: "Frost Fox", rarity: "common", power: 5, quote: "Silent steps through the snow." },
+  { id: "snow_owl", name: "Snow Owl", rarity: "common", power: 6, quote: "Watches the frozen forest." },
+  { id: "frozen_wolf", name: "Frozen Wolf", rarity: "common", power: 7, quote: "A lonely howl in winter." },
+  { id: "ice_penguin", name: "Ice Penguin", rarity: "common", power: 8, quote: "Slides faster than the wind." },
+  { id: "snow_deer", name: "Snow Deer", rarity: "common", power: 9, quote: "Graceful as falling snow." },
+
+  // ❄️ SNOW THEME - RARE
+  { id: "ice_phoenix", name: "Ice Phoenix", rarity: "rare", power: 12, quote: "Rises from frozen ashes." },
+  { id: "frost_knight", name: "Frost Knight", rarity: "rare", power: 14, quote: "Defender of the frozen kingdom." },
+  { id: "glacier_dragon", name: "Glacier Dragon", rarity: "rare", power: 16, quote: "Its breath freezes mountains." },
+  { id: "snow_spirit", name: "Snow Spirit", rarity: "rare", power: 11, quote: "A soul made of winter." },
+  { id: "crystal_wolf", name: "Crystal Wolf", rarity: "rare", power: 17, quote: "Born inside an ancient glacier." },
+
+  // ❄️ SNOW THEME - EPIC
+  { id: "blizzard_golem", name: "Blizzard Golem", rarity: "epic", power: 23, quote: "A giant awakened by the storm." },
+  { id: "frostbite_reaper", name: "Frostbite Reaper", rarity: "epic", power: 25, quote: "Winter follows wherever it walks." },
+  { id: "arctic_mech", name: "Arctic Mech", rarity: "epic", power: 27, quote: "Built to survive eternal winter." },
+  { id: "ice_storm_titan", name: "Ice Storm Titan", rarity: "epic", power: 29, quote: "Commands the frozen skies." },
+
+  // ❄️ SNOW THEME - LEGENDARY
+  { id: "absolute_zero_dragon", name: "Absolute Zero Dragon", rarity: "legendary", power: 38, quote: "The temperature of nothingness." },
+  { id: "eternal_frost_emperor", name: "Eternal Frost Emperor", rarity: "legendary", power: 42, quote: "Rules the kingdom of endless snow." },
+  { id: "glacial_overlord", name: "Glacial Overlord", rarity: "legendary", power: 45, quote: "Even mountains bow to winter." }
 ];
+
 
 
 const ENEMY_POOL = [
