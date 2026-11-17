@@ -1,32 +1,33 @@
+
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InkVibe - MechaSeason out now!</title>
-  <meta name="description" content="InkVibe — Mystic Edition | Sammle mystische Karten, ziehe seltene Charaktere und kämpfe im Browser." />
+  <title>InkVibe - Winter Season</title>
+  <meta name="description" content="InkVibe — Mystic Edition | Collect mystical cards, discover rare characters and battle in your browser." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
   <div class="snowflakes" aria-hidden="true">
-  <div class="snowflake">❄</div>
-  <div class="snowflake">❅</div>
-  <div class="snowflake">❆</div>
-  <div class="snowflake">❄</div>
-  <div class="snowflake">❅</div>
-  <div class="snowflake">❆</div>
-  <div class="snowflake">❄</div>
-  <div class="snowflake">❅</div>
-  <div class="snowflake">❆</div>
-  <div class="snowflake">❄</div>
-</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+    <div class="snowflake">❅</div>
+    <div class="snowflake">❆</div>
+    <div class="snowflake">❄</div>
+  </div>
 
   <div class="bg-layer">
     <div class="orb orb-a"></div>
     <div class="orb orb-b"></div>
     <div class="orb orb-c"></div>
     <div class="grid-overlay"></div>
-    <div id="drawReveal" class="draw-reveal placeholder-card"></div>
   </div>
 
   <div class="app-shell">
@@ -50,14 +51,15 @@
 
     <main>
 
-      <!-- HERO -->
       <section class="hero-grid">
         <div class="hero-main glass">
           <div class="hero-badge">✨ Mystic Gacha Adventure</div>
+
           <h2>New Season: <span>Mecha Season</span></h2>
+
           <p>
-           Wenn du mehr darüber wissen willst,
-           schau mal in den <span>Info Corner</span>
+            New Season + new cards
+            <span>Winter Edition</span> out now!
           </p>
 
           <div class="hero-stats">
@@ -65,10 +67,12 @@
               <span class="hero-stat-label">Ink</span>
               <span class="hero-stat-value" id="inkCount">0</span>
             </div>
+
             <div class="hero-stat">
               <span class="hero-stat-label">Collection</span>
               <span class="hero-stat-value" id="collectionCount">0</span>
             </div>
+
             <div class="hero-stat">
               <span class="hero-stat-label">Selected</span>
               <span class="hero-stat-value" id="selectedCardName">None</span>
@@ -79,65 +83,74 @@
             <button class="btn btn-primary btn-xl" onclick="drawCard()">
               🎴 Draw for 5 Ink
             </button>
+
             <button class="btn btn-secondary btn-xl" onclick="claimDaily()">
-              🎁 Claim Daily
+              🎁 Claim Daily Reward
             </button>
           </div>
         </div>
 
         <aside class="hero-side glass">
           <div class="side-label">Last Pull</div>
+
           <div id="lastPullCard" class="featured-card placeholder-card">
             <div class="featured-card-inner">
               <span class="featured-name">???</span>
               <span class="featured-rarity">Unknown</span>
             </div>
           </div>
+
           <p class="side-note">
-            Deine zuletzt gezogene Karte erscheint hier mit Rarity-Glow.
+            Your latest card appears here with its rarity glow.
           </p>
         </aside>
       </section>
 
-      <!-- QUICK ACTIONS -->
       <section class="quick-actions">
+
         <div class="quick-card glass">
           <div class="quick-icon">🎁</div>
           <h3>Daily Reward</h3>
-          <p>Hole dir einmal pro Tag kostenloses Ink.</p>
-          <button class="btn btn-primary" onclick="claimDaily()">Jetzt holen</button>
+          <p>Claim free Ink once every day.</p>
+          <button class="btn btn-primary" onclick="claimDaily()">
+            Claim Reward
+          </button>
         </div>
 
         <div class="quick-card glass" id="draw-zone">
           <div class="quick-icon">🎴</div>
           <h3>Mystic Draw</h3>
-          <p>Ziehe neue Karten und jage Legendary Pulls.</p>
-          <button class="btn btn-primary" onclick="drawCard()">Karte ziehen</button>
+          <p>Discover new cards and hunt for Legendary pulls.</p>
+          <button class="btn btn-primary" onclick="drawCard()">
+            Draw a Card
+          </button>
         </div>
 
         <div class="quick-card glass" id="fight-zone">
           <div class="quick-icon">⚔️</div>
           <h3>Fight</h3>
-          <p>Nutze deine ausgewählte Karte im Kampf.</p>
-          <button class="btn btn-secondary" onclick="fight()">Kampf starten</button>
+          <p>Use your selected card to battle powerful enemies.</p>
+          <button class="btn btn-secondary" onclick="fight()">
+            Start Battle
+          </button>
         </div>
 
         <div class="quick-card glass">
           <div class="quick-icon">📖</div>
           <h3>Wiki</h3>
-          <p>Entdecke Lore, Karten und Seltenheiten.</p>
-          <a href="wiki.html" class="btn btn-secondary">Wiki öffnen</a>
+          <p>Discover the lore, cards and rarities.</p>
+          <a href="wiki.html" class="btn btn-secondary">Open Wiki</a>
         </div>
+
       </section>
 
-      <!-- DRAW RESULT -->
       <section class="section-panel glass">
         <div class="section-head">
           <div>
             <span class="eyebrow">RESULT</span>
             <h2>Draw Chamber</h2>
           </div>
-          <p>Hier erscheint dein neuester Pull mit Seltenheit und Stärke.</p>
+          <p>Your latest pull, including its rarity and power, appears here.</p>
         </div>
 
         <div class="draw-result-wrap">
@@ -153,14 +166,17 @@
               <span class="meta-label">Name</span>
               <span class="meta-value" id="pullName">—</span>
             </div>
+
             <div class="meta-box">
               <span class="meta-label">Rarity</span>
               <span class="meta-value" id="pullRarity">—</span>
             </div>
+
             <div class="meta-box">
               <span class="meta-label">Power</span>
               <span class="meta-value" id="pullPower">—</span>
             </div>
+
             <div class="meta-box">
               <span class="meta-label">Owned</span>
               <span class="meta-value" id="pullOwned">—</span>
@@ -169,19 +185,20 @@
         </div>
       </section>
 
-      <!-- FIGHT -->
       <section class="section-panel glass fight-layout">
         <div class="section-head">
           <div>
             <span class="eyebrow">BATTLE</span>
             <h2>Fight Arena</h2>
           </div>
-          <p>Wähle eine Karte aus deiner Collection und kämpfe gegen Schattenwesen.</p>
+
+          <p>Select a card from your collection and battle mysterious creatures.</p>
         </div>
 
         <div class="fight-grid">
           <div class="arena-card">
             <h3>Your Card</h3>
+
             <div id="selectedFightCard" class="battle-card placeholder-card small-card">
               <div class="featured-card-inner">
                 <span class="featured-name">No Card Selected</span>
@@ -194,6 +211,7 @@
 
           <div class="arena-card">
             <h3>Enemy</h3>
+
             <div id="enemyCard" class="battle-card enemy-card small-card">
               <div class="featured-card-inner">
                 <span class="featured-name">Shadow Spawn</span>
@@ -204,19 +222,24 @@
         </div>
 
         <div class="fight-controls">
-          <button class="btn btn-primary btn-xl" onclick="fight()">⚔️ Start Fight</button>
-          <div id="fightResult" class="fight-result">Wähle eine Karte und starte den Kampf.</div>
+          <button class="btn btn-primary btn-xl" onclick="fight()">
+            ⚔️ Start Fight
+          </button>
+
+          <div id="fightResult" class="fight-result">
+            Select a card and start your battle.
+          </div>
         </div>
       </section>
 
-      <!-- COLLECTION -->
       <section class="section-panel glass" id="collection-zone">
         <div class="section-head">
           <div>
             <span class="eyebrow">COLLECTION</span>
             <h2>Your Cards</h2>
           </div>
-          <p>Klicke auf eine Karte, um sie auszuwählen. Duplikate werden gezählt.</p>
+
+          <p>Click on a card to select it. Duplicate cards are counted.</p>
         </div>
 
         <div id="collectionGrid" class="collection-grid"></div>
@@ -227,6 +250,7 @@
     <footer class="footer">
       <p>© 2026 InkVibe — Mystic Edition • Made with Ink, Chaos & Vibes</p>
     </footer>
+
   </div>
 
   <script src="script.js"></script>
