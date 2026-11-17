@@ -159,6 +159,11 @@ const ENEMY_POOL = [
   { name: "Eternal Ice Destroyer", power: [72, 90] }
 ];
 
+
+/* =====================================
+   RARITY SETTINGS
+===================================== */
+
 const RARITY_WEIGHTS = [
   { rarity: "common", chance: 55 },
   { rarity: "rare", chance: 28 },
@@ -180,6 +185,10 @@ const RARITY_COLORS = {
   legendary: "rarity-legendary"
 };
 
+/* =====================================
+   GAME SETTINGS
+===================================== */
+
 const STARTER_INK = 15;
 const DRAW_COST = 5;
 const DAILY_REWARD = 15;
@@ -187,11 +196,7 @@ const WIN_REWARD = 7;
 const LOSE_REWARD = -10;
 const PRESENT = 1000;
 
-function clampInk() {
-  if (state.ink < 0) {
-    state.ink = 0;
-  }
-}
+let lastFightTime = 0;
 
 let state = {
   ink: STARTER_INK,
@@ -202,8 +207,9 @@ let state = {
   username: "NewInker"
 };
 
-// 🔥 EINZIGE NEUE ZEILE
-let lastFightTime = 0;
+/* =====================================
+   SAVE AND LOAD
+===================================== */
 
 function saveGame() {
   localStorage.setItem("inkvibe_save", JSON.stringify(state));
@@ -211,11 +217,29 @@ function saveGame() {
 
 function loadGame() {
   const save = localStorage.getItem("inkvibe_save");
+
   if (save) {
     try {
       state = JSON.parse(save);
-    } catch (e) {
-      console.warn("Save corrupted, resetting.");
+
+      // Make sure all required properties exist
+      state.ink ??= STARTER_INK;
+      state.collection ??= {};
+      state.selectedCardId ??= null;
+      state.lastPullId ??= null;
+      state.lastDaily ??= null;
+      state.username ??= "NewInker";
+
+    } catch (error) {
+      console.warn("Save corrupted. Resetting game.");
+      state = {
+        ink: STARTER_INK,
+        collection: {},
+        selectedCardId: null,
+        lastPullId: null,
+        lastDaily: null,
+        username: "NewInker"
+      };
       saveGame();
     }
   } else {
@@ -223,15 +247,23 @@ function loadGame() {
   }
 
   const username = localStorage.getItem("inkvibe_user");
-  if (username) state.username = username;
+
+  if (username) {
+    state.username = username;
+  }
 }
+
+/* =====================================
+   CARD FUNCTIONS
+===================================== */
 
 function getCardById(id) {
   return CARD_POOL.find(card => card.id === id);
 }
 
 function getCollectionSize() {
-  return Object.values(state.collection).reduce((sum, count) => sum + count, 0);
+  return Object.values(state.collection)
+    .reduce((sum, count) => sum + count, 0);
 }
 
 function rarityRoll() {
@@ -240,13 +272,22 @@ function rarityRoll() {
 
   for (const tier of RARITY_WEIGHTS) {
     cumulative += tier.chance;
-    if (roll <= cumulative) return tier.rarity;
+
+    if (roll <= cumulative) {
+      return tier.rarity;
+    }
   }
+
   return "common";
 }
 
 function randomCardByRarity(rarity) {
   const pool = CARD_POOL.filter(card => card.rarity === rarity);
+
+  if (pool.length === 0) {
+    return CARD_POOL[Math.floor(Math.random() * CARD_POOL.length)];
+  }
+
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -254,15 +295,30 @@ function addCard(cardId) {
   state.collection[cardId] = (state.collection[cardId] || 0) + 1;
 }
 
+/* =====================================
+   DISPLAY FUNCTIONS
+===================================== */
+
 function setText(id, value) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value;
+  const element = document.getElementById(id);
+
+  if (element) {
+    element.textContent = value;
+  }
 }
 
 function renderTopStats() {
   setText("inkCount", state.ink);
   setText("collectionCount", getCollectionSize());
-  setText("selectedCardName", state.selectedCardId ? getCardById(state.selectedCardId).name : "None");
+
+  const selectedCard = state.selectedCardId
+    ? getCardById(state.selectedCardId)
+    : null;
+
+  setText(
+    "selectedCardName",
+    selectedCard ? selectedCard.name : "None"
+  );
 }
 
 function cardHTML(card, count = null, selected = false, compact = false) {
@@ -273,6 +329,7 @@ function cardHTML(card, count = null, selected = false, compact = false) {
         ${count !== null ? `<span class="card-count-pill">x${count}</span>` : ""}
         <span class="card-power-pill">⚡ ${card.power}</span>
       </div>
+
       <div class="card-bottom">
         <div class="card-name">${card.name}</div>
         <div class="card-sub">${card.quote}</div>
@@ -281,10 +338,17 @@ function cardHTML(card, count = null, selected = false, compact = false) {
   `;
 }
 
+/* =====================================
+   LAST PULL
+===================================== */
+
 function renderLastPull() {
   const container = document.getElementById("lastPullCard");
   const reveal = document.getElementById("drawReveal");
-  const lastCard = state.lastPullId ? getCardById(state.lastPullId) : null;
+
+  const lastCard = state.lastPullId
+    ? getCardById(state.lastPullId)
+    : null;
 
   if (!container || !reveal) return;
 
@@ -295,17 +359,22 @@ function renderLastPull() {
         <span class="featured-rarity">Unknown</span>
       </div>
     `;
+
     reveal.innerHTML = `
       <div class="featured-card-inner">
         <span class="featured-name">No Pull Yet</span>
         <span class="featured-rarity">Draw to reveal</span>
       </div>
     `;
+
     return;
   }
 
-  container.className = `featured-card ${RARITY_COLORS[lastCard.rarity]}`;
-  reveal.className = `draw-reveal ${RARITY_COLORS[lastCard.rarity]}`;
+  container.className =
+    `featured-card ${RARITY_COLORS[lastCard.rarity]}`;
+
+  reveal.className =
+    `draw-reveal ${RARITY_COLORS[lastCard.rarity]}`;
 
   container.innerHTML = `
     <div class="featured-card-inner">
@@ -327,23 +396,40 @@ function renderLastPull() {
   setText("pullOwned", state.collection[lastCard.id] || 1);
 }
 
+/* =====================================
+   COLLECTION
+===================================== */
+
 function renderCollection() {
   const grid = document.getElementById("collectionGrid");
+
   if (!grid) return;
 
   const ownedCards = Object.entries(state.collection)
-    .map(([id, count]) => ({ card: getCardById(id), count }))
+    .map(([id, count]) => ({
+      card: getCardById(id),
+      count
+    }))
+    .filter(item => item.card)
     .sort((a, b) => {
-      const rarityOrder = { legendary: 4, epic: 3, rare: 2, common: 1 };
-      return rarityOrder[b.card.rarity] - rarityOrder[a.card.rarity] || b.card.power - a.card.power;
+      const rarityOrder = {
+        legendary: 4,
+        epic: 3,
+        rare: 2,
+        common: 1
+      };
+
+      return rarityOrder[b.card.rarity] - rarityOrder[a.card.rarity]
+        || b.card.power - a.card.power;
     });
 
   if (ownedCards.length === 0) {
     grid.innerHTML = `
       <div class="collection-empty glass" style="padding:24px;border-radius:22px;">
-        Noch keine Karten. Zieh erstmal deine ersten mystischen Pulls.
+        No cards yet. Draw your first mystical cards!
       </div>
     `;
+
     return;
   }
 
@@ -354,28 +440,41 @@ function renderCollection() {
   `).join("");
 }
 
+/* =====================================
+   SELECTED FIGHT CARD
+===================================== */
+
 function renderSelectedFightCard() {
-  const el = document.getElementById("selectedFightCard");
-  if (!el) return;
+  const element = document.getElementById("selectedFightCard");
+
+  if (!element) return;
 
   if (!state.selectedCardId) {
-    el.className = "battle-card placeholder-card small-card";
-    el.innerHTML = `
+    element.className = "battle-card placeholder-card small-card";
+
+    element.innerHTML = `
       <div class="featured-card-inner">
         <span class="featured-name">No Card Selected</span>
         <span class="featured-rarity">Choose from Collection</span>
       </div>
     `;
+
     return;
   }
 
   const card = getCardById(state.selectedCardId);
-  el.className = `battle-card small-card ${RARITY_COLORS[card.rarity]}`;
-  el.innerHTML = `
+
+  if (!card) return;
+
+  element.className =
+    `battle-card small-card ${RARITY_COLORS[card.rarity]}`;
+
+  element.innerHTML = `
     <div class="card-topline">
       <span class="card-rarity-pill">${RARITY_LABELS[card.rarity]}</span>
       <span class="card-power-pill">⚡ ${card.power}</span>
     </div>
+
     <div class="card-bottom">
       <div class="card-name">${card.name}</div>
       <div class="card-sub">${card.quote}</div>
@@ -383,10 +482,21 @@ function renderSelectedFightCard() {
   `;
 }
 
+/* =====================================
+   USERNAME
+===================================== */
+
 function renderLoginName() {
   const user = localStorage.getItem("inkvibe_user");
-  if (user) state.username = user;
+
+  if (user) {
+    state.username = user;
+  }
 }
+
+/* =====================================
+   RENDER EVERYTHING
+===================================== */
 
 function renderAll() {
   renderLoginName();
@@ -394,27 +504,38 @@ function renderAll() {
   renderLastPull();
   renderCollection();
   renderSelectedFightCard();
+
   saveGame();
 }
+
+/* =====================================
+   DAILY REWARD
+===================================== */
 
 function claimDaily() {
   const today = new Date().toDateString();
 
   if (state.lastDaily === today) {
-    alert("Du hast deinen Daily Reward heute schon abgeholt.");
+    alert("You have already claimed your Daily Reward today!");
     return;
   }
 
   state.lastDaily = today;
   state.ink += DAILY_REWARD;
+
   saveGame();
   renderAll();
-  alert(`🎁 Daily Reward erhalten! +${DAILY_REWARD} Ink`);
+
+  alert(`🎁 Daily Reward claimed! +${DAILY_REWARD} Ink`);
 }
+
+/* =====================================
+   DRAW CARDS
+===================================== */
 
 function drawCard() {
   if (state.ink < DRAW_COST) {
-    alert("Nicht genug Ink!");
+    alert("Not enough Ink!");
     return;
   }
 
@@ -422,6 +543,12 @@ function drawCard() {
 
   const rarity = rarityRoll();
   const card = randomCardByRarity(rarity);
+
+  if (!card) {
+    alert("Something went wrong while drawing a card!");
+    state.ink += DRAW_COST;
+    return;
+  }
 
   addCard(card.id);
   state.lastPullId = card.id;
@@ -434,49 +561,85 @@ function drawCard() {
 
   const reveal = document.getElementById("drawReveal");
 
-  // 👉 Reset + "Revealing..."
-  reveal.className = "draw-reveal placeholder-card";
-  reveal.innerHTML = `
-    <div class="featured-card-inner">
-      <span class="featured-name">...</span>
-      <span class="featured-rarity">Revealing</span>
-    </div>
-  `;
+  if (reveal) {
+    reveal.className = "draw-reveal placeholder-card";
 
-  // 👉 Kleine Verzögerung für Effekt
-  setTimeout(() => {
+    reveal.innerHTML = `
+      <div class="featured-card-inner">
+        <span class="featured-name">...</span>
+        <span class="featured-rarity">Revealing...</span>
+      </div>
+    `;
+
+    setTimeout(() => {
+      renderAll();
+
+      reveal.classList.add("card-flip");
+      reveal.classList.add(`rarity-glow-${card.rarity}`);
+
+    }, 300);
+  } else {
     renderAll();
-
-    // 👉 Animation hinzufügen
-    reveal.classList.add("card-flip");
-    reveal.classList.add(`rarity-glow-${card.rarity}`);
-
-  }, 300);
+  }
 }
 
+/* =====================================
+   SELECT CARD
+===================================== */
+
 function selectCard(cardId) {
+  if (!getCardById(cardId)) return;
+
+  if (!state.collection[cardId]) return;
+
   state.selectedCardId = cardId;
+
   saveGame();
   renderAll();
 }
-function getPresent(){
-state.ink += PRESENT;
+
+/* =====================================
+   SPECIAL PRESENT
+===================================== */
+
+function getPresent() {
+  state.ink += PRESENT;
+
+  saveGame();
+  renderAll();
+
+  alert(`🎁 You received ${PRESENT} Ink!`);
 }
+
+/* =====================================
+   ENEMIES
+===================================== */
+
 function randomEnemy() {
-  const enemyBase = ENEMY_POOL[Math.floor(Math.random() * ENEMY_POOL.length)];
-  const power = Math.floor(Math.random() * (enemyBase.power[1] - enemyBase.power[0] + 1)) + enemyBase.power[0];
-  return { name: enemyBase.name, power };
+  const enemyBase =
+    ENEMY_POOL[Math.floor(Math.random() * ENEMY_POOL.length)];
+
+  const power = Math.floor(
+    Math.random() * (enemyBase.power[1] - enemyBase.power[0] + 1)
+  ) + enemyBase.power[0];
+
+  return {
+    name: enemyBase.name,
+    power
+  };
 }
 
 function renderEnemy(enemy) {
-  const el = document.getElementById("enemyCard");
-  if (!el) return;
+  const element = document.getElementById("enemyCard");
 
-  el.innerHTML = `
+  if (!element) return;
+
+  element.innerHTML = `
     <div class="card-topline">
       <span class="card-rarity-pill">Enemy</span>
       <span class="card-power-pill">⚡ ${enemy.power}</span>
     </div>
+
     <div class="card-bottom">
       <div class="card-name">${enemy.name}</div>
       <div class="card-sub">A hostile force from the Ink.</div>
@@ -484,43 +647,73 @@ function renderEnemy(enemy) {
   `;
 }
 
+/* =====================================
+   FIGHT SYSTEM
+===================================== */
+
 function fight() {
   const now = Date.now();
+  const resultElement = document.getElementById("fightResult");
+
   if (now - lastFightTime < 10000) {
-    document.getElementById("fightResult").textContent = "Warte kurz...";
+    if (resultElement) {
+      resultElement.textContent = "Please wait before fighting again!";
+    }
+
     return;
   }
-  lastFightTime = now;
 
   if (!state.selectedCardId) {
-    alert("Wähle zuerst eine Karte aus deiner Collection.");
+    alert("Please select a card from your Collection first!");
     return;
   }
 
   const playerCard = getCardById(state.selectedCardId);
+
+  if (!playerCard) {
+    alert("Your selected card could not be found!");
+    return;
+  }
+
+  lastFightTime = now;
+
   const enemy = randomEnemy();
 
   renderEnemy(enemy);
 
-  const playerRoll = playerCard.power + Math.floor(Math.random() * 8);
-  const enemyRoll = enemy.power + Math.floor(Math.random() * 8);
+  const playerRoll =
+    playerCard.power + Math.floor(Math.random() * 8);
 
-  const resultEl = document.getElementById("fightResult");
+  const enemyRoll =
+    enemy.power + Math.floor(Math.random() * 8);
+
+  if (!resultElement) return;
 
   if (playerRoll >= enemyRoll) {
     state.ink += WIN_REWARD;
-    resultEl.textContent = `🏆 ${playerCard.name} besiegt ${enemy.name}! (+${WIN_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
+
+    resultElement.textContent =
+      `🏆 ${playerCard.name} defeated ${enemy.name}! (+${WIN_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
+
   } else {
     state.ink += LOSE_REWARD;
-    resultEl.textContent = `💀 ${playerCard.name} verliert gegen ${enemy.name}... (${LOSE_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
+
+    resultElement.textContent =
+      `💀 ${playerCard.name} lost against ${enemy.name}... (${LOSE_REWARD} Ink) [${playerRoll} vs ${enemyRoll}]`;
   }
 
-  // 🧠 Ink darf nie unter 0 fallen
+  // Ink can never go below zero
   state.ink = Math.max(0, state.ink);
 
   saveGame();
   renderAll();
 }
 
+/* =====================================
+   START GAME
+===================================== */
+
 loadGame();
+renderAll();
+
 renderAll();
