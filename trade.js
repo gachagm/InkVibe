@@ -1,87 +1,229 @@
-// Lade dein bestehendes Spiel
-loadGame();
 
-let selectedCard = null;
+/* =====================================
+   TRADING SYSTEM
+===================================== */
 
-// 🔹 Karten anzeigen
+let selectedTradeCard = null;
+
+/* =====================================
+   RENDER PLAYER COLLECTION
+===================================== */
+
 function renderYourCards() {
+
   const container = document.getElementById("yourCards");
+
+  if (!container) return;
 
   const entries = Object.entries(state.collection);
 
   if (entries.length === 0) {
-    container.innerHTML = "Du hast noch keine Karten.";
+
+    container.innerHTML = `
+      <p>You don't own any cards yet.</p>
+    `;
+
     return;
   }
 
   container.innerHTML = entries.map(([id, count]) => {
+
     const card = getCardById(id);
+
+    if (!card) return "";
+
     return `
-      <div class="card" onclick="selectCard('${id}')">
-        ${card.name} (x${count})
+      <div
+        class="card ${selectedTradeCard === id ? "selected" : ""}"
+        onclick="selectTradeCard('${id}')"
+      >
+
+        <strong>${card.name}</strong>
+
+        <p>${card.rarity.toUpperCase()}</p>
+
+        <p>⚡ Power: ${card.power}</p>
+
+        <p>Owned: x${count}</p>
+
       </div>
     `;
+
   }).join("");
+
 }
 
-// 🔹 Karte auswählen
-function selectCard(id) {
-  selectedCard = id;
-  document.getElementById("selectedInfo").textContent =
-    "Ausgewählt: " + getCardById(id).name;
+/* =====================================
+   SELECT CARD FOR TRADING
+===================================== */
+
+function selectTradeCard(cardId) {
+
+  const card = getCardById(cardId);
+
+  if (!card || !state.collection[cardId]) return;
+
+  selectedTradeCard = cardId;
+
+  const info = document.getElementById("selectedInfo");
+
+  if (info) {
+    info.textContent = "Selected: " + card.name;
+  }
+
+  renderYourCards();
+
 }
 
-// 🔥 CODE ERSTELLEN
+/* =====================================
+   GENERATE TRADE CODE
+===================================== */
+
 function generateTradeCode() {
-  if (!selectedCard) {
-    alert("Bitte zuerst eine Karte auswählen!");
+
+  if (!selectedTradeCard) {
+
+    alert("Please select a card first!");
+
+    return;
+  }
+
+  const card = getCardById(selectedTradeCard);
+
+  if (!card) {
+
+    alert("Invalid card!");
+
     return;
   }
 
   const data = {
-    cardId: selectedCard,
+
+    cardId: selectedTradeCard,
+
     time: Date.now()
+
   };
 
-  // Encode (Base64)
   const code = btoa(JSON.stringify(data));
 
-  document.getElementById("tradeCode").value = code;
+  const input = document.getElementById("tradeCode");
+
+  input.value = code;
+
+  alert("Trade Code successfully generated!");
+
 }
 
-// 🔄 CODE EINLÖSEN
-function redeemCode() {
-  const input = document.getElementById("redeemInput").value;
+/* =====================================
+   COPY TRADE CODE
+===================================== */
 
-  if (!input) {
-    alert("Bitte Code eingeben!");
+function copyTradeCode() {
+
+  const input = document.getElementById("tradeCode");
+
+  if (!input || !input.value) {
+
+    alert("Generate a Trade Code first!");
+
+    return;
+  }
+
+  if (navigator.clipboard && window.isSecureContext) {
+
+    navigator.clipboard.writeText(input.value)
+      .then(() => {
+        alert("Trade Code copied!");
+      })
+      .catch(() => {
+        input.select();
+        alert("Please copy the selected code manually.");
+      });
+
+  } else {
+
+    input.select();
+    alert("Please copy the selected code manually.");
+
+  }
+
+}
+
+/* =====================================
+   REDEEM TRADE CODE
+===================================== */
+
+function redeemCode() {
+
+  const input = document.getElementById("redeemInput");
+
+  const code = input.value.trim();
+
+  if (!code) {
+
+    alert("Please enter a Trade Code!");
+
     return;
   }
 
   try {
-    const data = JSON.parse(atob(input));
+
+    const decoded = atob(code);
+
+    const data = JSON.parse(decoded);
+
     const cardId = data.cardId;
 
-    // Prüfen ob Karte existiert
     const card = getCardById(cardId);
+
+    // Check if the card exists
     if (!card) {
-      alert("Ungültige Karte!");
+
+      alert("Invalid Trade Code! Card not found.");
+
       return;
     }
 
-    // Karte hinzufügen
-    state.collection[cardId] = (state.collection[cardId] || 0) + 1;
+    // Check the code timestamp
+    if (
+      typeof data.time !== "number" ||
+      data.time > Date.now() ||
+      Date.now() - data.time > 24 * 60 * 60 * 1000
+    ) {
+
+      alert("This Trade Code has expired or is invalid!");
+
+      return;
+    }
+
+    // Add the received card
+    state.collection[cardId] =
+      (state.collection[cardId] || 0) + 1;
 
     saveGame();
+
     renderYourCards();
 
-    alert("🎉 Du hast erhalten: " + card.name);
+    // Refresh the main game if it is available
+    if (typeof renderAll === "function") {
+      renderAll();
+    }
 
-  } catch (e) {
-    alert("Ungültiger Code!");
+    alert("🎉 You received: " + card.name);
+
+    input.value = "";
+
+  } catch (error) {
+
+    alert("Invalid Trade Code!");
+
   }
+
 }
 
-// 🔹 Start
-renderYourCards();
+/* =====================================
+   INITIALIZE TRADING
+===================================== */
 
+renderYourCards();
