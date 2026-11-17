@@ -1,164 +1,130 @@
+
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
+
 <head>
- <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>InkVibe Trading (Beta)</title>
- <link rel="stylesheet" href="styles.css">
+
+  <link rel="stylesheet" href="style.css">
 </head>
-  <style>
-    body {
-      font-family: Arial;
-      background: #111;
-      color: white;
-      padding: 20px;
-    }
 
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .section {
-      margin-bottom: 30px;
-      padding: 15px;
-      border: 1px solid #444;
-      border-radius: 10px;
-    }
-
-    .card {
-      border: 1px solid #666;
-      padding: 8px;
-      margin: 5px 0;
-      cursor: pointer;
-    }
-
-    .card:hover {
-      background: #222;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
-    button {
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-  </style>
-</head>
 <body>
 
-<h1>🔄 InkVibe Trading (Beta)</h1>
+  <div class="app-shell">
 
-<!-- DEINE KARTEN -->
-<div class="section">
-  <h2>Deine Karten</h2>
-  <div id="yourCards"></div>
-  <p id="selectedInfo">Keine Karte ausgewählt</p>
-</div>
+    <header class="topbar glass">
 
-<!-- CODE ERSTELLEN -->
-<div class="section">
-  <h2>Trade-Code erstellen</h2>
-  <button onclick="generateTradeCode()">Code generieren</button>
-  <input id="tradeCode" readonly placeholder="Hier erscheint dein Code">
-</div>
+      <div class="brand">
+        <div class="brand-mark">🐙</div>
 
-<!-- CODE EINLÖSEN -->
-<div class="section">
-  <h2>Code einlösen</h2>
-  <input id="redeemInput" placeholder="Code hier einfügen">
-  <button onclick="redeemCode()">Einlösen</button>
-</div>
-
-<script src="script.js"></script>
-
-<script>
-// Lade deinen bestehenden Spielstand
-loadGame();
-
-let selectedCard = null;
-
-// Karten anzeigen
-function renderYourCards() {
-  const container = document.getElementById("yourCards");
-
-  const entries = Object.entries(state.collection);
-
-  if (entries.length === 0) {
-    container.innerHTML = "Du hast noch keine Karten.";
-    return;
-  }
-
-  container.innerHTML = entries.map(([id, count]) => {
-    const card = getCardById(id);
-    return `
-      <div class="card" onclick="selectCard('${id}')">
-        ${card.name} (x${count})
+        <div class="brand-copy">
+          <h1>InkVibe</h1>
+          <p>Mystic Edition</p>
+        </div>
       </div>
-    `;
-  }).join("");
-}
 
-// Karte auswählen
-function selectCard(id) {
-  selectedCard = id;
-  document.getElementById("selectedInfo").textContent =
-    "Ausgewählt: " + getCardById(id).name;
-}
+      <nav class="top-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#collection-zone">Collection</a>
+        <a href="wiki.html">Wiki</a>
+        <a href="trade.html">Trading BETA</a>
+      </nav>
 
-// CODE GENERIEREN
-function generateTradeCode() {
-  if (!selectedCard) {
-    alert("Bitte zuerst eine Karte auswählen!");
-    return;
-  }
+    </header>
 
-  const data = {
-    cardId: selectedCard,
-    time: Date.now()
-  };
+    <main>
 
-  const code = btoa(JSON.stringify(data));
+      <section class="section-panel glass">
 
-  document.getElementById("tradeCode").value = code;
-}
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">TRADING SYSTEM</span>
+            <h2>InkVibe Trading</h2>
+          </div>
 
-// CODE EINLÖSEN
-function redeemCode() {
-  const input = document.getElementById("redeemInput").value;
+          <p>
+            Trade cards with other players using special Trade Codes.
+          </p>
+        </div>
 
-  if (!input) {
-    alert("Bitte Code eingeben!");
-    return;
-  }
+        <div class="trade-container">
 
-  try {
-    const data = JSON.parse(atob(input));
-    const cardId = data.cardId;
+          <!-- YOUR COLLECTION -->
 
-    // Karte hinzufügen
-    state.collection[cardId] = (state.collection[cardId] || 0) + 1;
+          <div class="section">
+            <h2>🎴 Your Cards</h2>
 
-    saveGame();
-    renderYourCards();
+            <div id="yourCards"></div>
 
-    alert("🎉 Du hast erhalten: " + getCardById(cardId).name);
+            <p id="selectedInfo">
+              No card selected
+            </p>
+          </div>
 
-  } catch (e) {
-    alert("Ungültiger Code!");
-  }
-}
+          <!-- GENERATE TRADE CODE -->
 
-// Initial render
-renderYourCards();
-</script>
+          <div class="section">
 
+            <h2>📤 Create Trade Code</h2>
 
-<a href= index.html>Back to game</a>
+            <p>
+              Select a card and generate a code to share with another player.
+            </p>
+
+            <button class="btn btn-primary" onclick="generateTradeCode()">
+              Generate Code
+            </button>
+
+            <input
+              id="tradeCode"
+              readonly
+              placeholder="Your Trade Code will appear here"
+            >
+
+            <button class="btn btn-secondary" onclick="copyTradeCode()">
+              📋 Copy Code
+            </button>
+
+          </div>
+
+          <!-- REDEEM TRADE CODE -->
+
+          <div class="section">
+
+            <h2>📥 Redeem Trade Code</h2>
+
+            <p>
+              Enter another player's Trade Code to receive their card.
+            </p>
+
+            <input
+              id="redeemInput"
+              placeholder="Enter Trade Code here"
+            >
+
+            <button class="btn btn-primary" onclick="redeemCode()">
+              Redeem Code
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 InkVibe — Mystic Edition • Made with Ink, Chaos & Vibes</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+  <script src="trade.js"></script>
 
 </body>
 </html>
