@@ -35,7 +35,9 @@ const CARD_POOL = [
   { id: "infinity-mech-warlord", name: "Infinity Mech Warlord", rarity: "legendary", power: 70, quote: "Endless power, endless war." }
 ];
 
+
 const ENEMY_POOL = [
+  // Ursprüngliche Gegner
   { name: "Shadow Spawn", power: [5, 10] },
   { name: "Cursed Echo", power: [8, 14] },
   { name: "Night Stalker", power: [12, 18] },
@@ -50,7 +52,43 @@ const ENEMY_POOL = [
   { name: "Quantum Annihilator X", power: [34, 46] },
   { name: "Dark Pulse Executioner", power: [30, 50] },
   { name: "Hyperion Chaos Engine", power: [37, 60] },
-  { name: "Singularity Warbringer", power: [38, 70] }
+  { name: "Singularity Warbringer", power: [38, 70] },
+
+  // ❄️ Schwache Eis-Gegner
+  { name: "Frostling", power: [5, 10] },
+  { name: "Snow Phantom", power: [8, 14] },
+  { name: "Ice Goblin", power: [10, 16] },
+  { name: "Frozen Skeleton", power: [12, 18] },
+  { name: "Snow Wolf", power: [15, 22] },
+  { name: "Frost Spider", power: [18, 24] },
+  { name: "Ice Wraith", power: [20, 26] },
+  { name: "Glacier Hound", power: [22, 28] },
+  { name: "Blizzard Imp", power: [24, 30] },
+  { name: "Frozen Revenant", power: [26, 30] },
+
+  // ❄️ Gleichstarke Eis-Gegner
+  { name: "Frost Knight", power: [30, 38] },
+  { name: "Glacier Berserker", power: [32, 42] },
+  { name: "Snowstorm Reaper", power: [34, 44] },
+  { name: "Cryo Mech Warrior", power: [35, 46] },
+  { name: "Icebound Executioner", power: [36, 48] },
+  { name: "Arctic Doom Bringer", power: [38, 50] },
+  { name: "Frozen Chaos Beast", power: [32, 48] },
+  { name: "Frostbite Overlord", power: [40, 50] },
+  { name: "Blizzard Destroyer", power: [37, 49] },
+  { name: "Glacial War Machine", power: [40, 50] },
+
+  // ❄️ Stärkere Eis-Gegner
+  { name: "Ancient Frost Titan", power: [50, 60] },
+  { name: "Absolute Zero Colossus", power: [52, 65] },
+  { name: "Cryogenic Nightmare", power: [55, 68] },
+  { name: "Eternal Winter Dragon", power: [58, 72] },
+  { name: "Frozen Apocalypse King", power: [60, 75] },
+  { name: "Glacier Annihilator", power: [62, 76] },
+  { name: "Arctic Oblivion God", power: [65, 78] },
+  { name: "Omega Frost Emperor", power: [68, 80] },
+  { name: "Absolute Blizzard Overlord", power: [70, 85] },
+  { name: "Eternal Ice Destroyer", power: [72, 90] }
 ];
 
 const RARITY_WEIGHTS = [
