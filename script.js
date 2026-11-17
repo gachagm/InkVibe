@@ -60,7 +60,46 @@ const CARD_POOL = [
   // ❄️ SNOW THEME - LEGENDARY
   { id: "absolute_zero_dragon", name: "Absolute Zero Dragon", rarity: "legendary", power: 38, quote: "The temperature of nothingness." },
   { id: "eternal_frost_emperor", name: "Eternal Frost Emperor", rarity: "legendary", power: 42, quote: "Rules the kingdom of endless snow." },
-  { id: "glacial_overlord", name: "Glacial Overlord", rarity: "legendary", power: 45, quote: "Even mountains bow to winter." }
+  { id: "glacial_overlord", name: "Glacial Overlord", rarity: "legendary", power: 45, quote: "Even mountains bow to winter." },
+  
+  // ❄️ MORE SNOW CARDS - COMMON
+  { id: "frost_squirrel", name: "Frost Squirrel", rarity: "common", power: 3, quote: "Hides nuts beneath the ice." },
+  { id: "snow_kitten", name: "Snow Kitten", rarity: "common", power: 4, quote: "Paws leave tiny frozen prints." },
+  { id: "ice_frog", name: "Ice Frog", rarity: "common", power: 4, quote: "Sleeps beneath frozen ponds." },
+  { id: "winter_hamster", name: "Winter Hamster", rarity: "common", power: 5, quote: "A tiny ball of snow." },
+  { id: "frozen_bat", name: "Frozen Bat", rarity: "common", power: 5, quote: "Flies through icy caves." },
+  { id: "snow_pup", name: "Snow Pup", rarity: "common", power: 6, quote: "Still learning to howl." },
+  { id: "ice_seal", name: "Ice Seal", rarity: "common", power: 6, quote: "Slides across frozen lakes." },
+  { id: "frost_rabbit", name: "Frost Rabbit", rarity: "common", power: 7, quote: "Faster than falling snow." },
+  { id: "snow_crow", name: "Snow Crow", rarity: "common", power: 8, quote: "Collects shiny ice crystals." },
+  { id: "tiny_snow_golem", name: "Tiny Snow Golem", rarity: "common", power: 9, quote: "Small body, cold heart." },
+
+  // ❄️ MORE SNOW CARDS - RARE
+  { id: "frost_panther", name: "Frost Panther", rarity: "rare", power: 11, quote: "Hunts silently in blizzards." },
+  { id: "ice_samurai", name: "Ice Samurai", rarity: "rare", power: 13, quote: "Master of the frozen blade." },
+  { id: "arctic_fox_spirit", name: "Arctic Fox Spirit", rarity: "rare", power: 14, quote: "A mysterious winter guardian." },
+  { id: "frozen_griffin", name: "Frozen Griffin", rarity: "rare", power: 15, quote: "Wings covered in crystal frost." },
+  { id: "snow_leopard", name: "Snow Leopard", rarity: "rare", power: 16, quote: "King of the snowy mountains." },
+  { id: "ice_jellyfish", name: "Ice Jellyfish", rarity: "rare", power: 12, quote: "Glows beneath frozen waters." },
+  { id: "glacier_guardian", name: "Glacier Guardian", rarity: "rare", power: 18, quote: "Protects the ancient ice." },
+  { id: "frost_witch", name: "Frost Witch", rarity: "rare", power: 19, quote: "Whispers spells into snowflakes." },
+
+  // ❄️ MORE SNOW CARDS - EPIC
+  { id: "blizzard_phantom", name: "Blizzard Phantom", rarity: "epic", power: 22, quote: "Appears inside the white storm." },
+  { id: "frozen_mech_guardian", name: "Frozen Mech Guardian", rarity: "epic", power: 24, quote: "Powered by ancient ice." },
+  { id: "crystal_ice_dragon", name: "Crystal Ice Dragon", rarity: "epic", power: 26, quote: "Its scales shine like diamonds." },
+  { id: "arctic_storm_beast", name: "Arctic Storm Beast", rarity: "epic", power: 28, quote: "Brings winter wherever it goes." },
+  { id: "frost_crowned_king", name: "Frost Crowned King", rarity: "epic", power: 30, quote: "The ruler of frozen valleys." },
+
+  // ❄️ MORE SNOW CARDS - LEGENDARY
+  { id: "polar_star_dragon", name: "Polar Star Dragon", rarity: "legendary", power: 35, quote: "Born beneath the northern lights." },
+  { id: "eternal_blizzard", name: "Eternal Blizzard", rarity: "legendary", power: 37, quote: "A storm that never ends." },
+  { id: "frost_galaxy_emperor", name: "Frost Galaxy Emperor", rarity: "legendary", power: 40, quote: "Commands the stars of winter." },
+  { id: "absolute_frost_titan", name: "Absolute Frost Titan", rarity: "legendary", power: 43, quote: "The strongest force of winter." },
+  { id: "snowfall_ancient", name: "Snowfall Ancient", rarity: "legendary", power: 32, quote: "Older than the first snowfall." },
+  { id: "winter_void_king", name: "Winter Void King", rarity: "legendary", power: 44, quote: "Darkness trapped inside ice." },
+  { id: "crystal_universe_dragon", name: "Crystal Universe Dragon", rarity: "legendary", power: 46, quote: "An entire frozen universe within." }
+
 ];
 
 
